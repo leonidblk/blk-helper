@@ -46,6 +46,10 @@
             this.button9 = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.button10 = new System.Windows.Forms.Button();
+            this.button11 = new System.Windows.Forms.Button();
+            this.folderBrowserDialog4 = new System.Windows.Forms.FolderBrowserDialog();
+            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.button12 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -61,7 +65,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(30, 329);
+            this.button2.Location = new System.Drawing.Point(30, 418);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(217, 39);
             this.button2.TabIndex = 1;
@@ -71,7 +75,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(30, 379);
+            this.button3.Location = new System.Drawing.Point(30, 468);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(200, 39);
             this.button3.TabIndex = 2;
@@ -81,7 +85,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(30, 435);
+            this.button4.Location = new System.Drawing.Point(30, 524);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(200, 33);
             this.button4.TabIndex = 3;
@@ -91,7 +95,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(236, 437);
+            this.textBox1.Location = new System.Drawing.Point(236, 526);
             this.textBox1.Name = "textBox1";
             this.textBox1.PlaceholderText = "Migration name";
             this.textBox1.Size = new System.Drawing.Size(200, 27);
@@ -99,7 +103,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(30, 277);
+            this.button5.Location = new System.Drawing.Point(30, 366);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(273, 35);
             this.button5.TabIndex = 4;
@@ -109,7 +113,7 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(309, 280);
+            this.textBox2.Location = new System.Drawing.Point(309, 369);
             this.textBox2.Name = "textBox2";
             this.textBox2.PlaceholderText = "Root path is empty";
             this.textBox2.ReadOnly = true;
@@ -118,7 +122,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(553, 248);
+            this.pictureBox1.Location = new System.Drawing.Point(553, 337);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 64);
             this.pictureBox1.TabIndex = 6;
@@ -166,7 +170,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(236, 414);
+            this.label1.Location = new System.Drawing.Point(236, 503);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(115, 20);
             this.label1.TabIndex = 11;
@@ -174,29 +178,28 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(30, 499);
+            this.button9.Location = new System.Drawing.Point(30, 588);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(291, 29);
             this.button9.TabIndex = 12;
-            this.button9.Text = "Connect so staging database";
+            this.button9.Text = "Connect to staging database";
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.ConnectToStagingDb_Click);
             // 
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(30, 544);
+            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.label2.ForeColor = System.Drawing.Color.Red;
+            this.label2.Location = new System.Drawing.Point(30, 652);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 20);
+            this.label2.Size = new System.Drawing.Size(114, 20);
             this.label2.TabIndex = 13;
             this.label2.Text = "Connected to...";
-            this.label2.ForeColor = System.Drawing.Color.Red; // Make the text color red
-            this.label2.Font = new System.Drawing.Font(label2.Font, System.Drawing.FontStyle.Bold); // Make the text bold
-
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(374, 499);
+            this.button10.Location = new System.Drawing.Point(374, 588);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(320, 29);
             this.button10.TabIndex = 14;
@@ -204,11 +207,41 @@
             this.button10.UseVisualStyleBackColor = true;
             this.button10.Click += new System.EventHandler(this.ConnectToLocalDatabase_Click);
             // 
+            // button11
+            // 
+            this.button11.Location = new System.Drawing.Point(30, 212);
+            this.button11.Name = "button11";
+            this.button11.Size = new System.Drawing.Size(291, 29);
+            this.button11.TabIndex = 15;
+            this.button11.Text = "Select orchistrator root folder";
+            this.button11.UseVisualStyleBackColor = true;
+            this.button11.Click += new System.EventHandler(this.SelectOrchistratorPath_Click);
+            // 
+            // textBox4
+            // 
+            this.textBox4.Location = new System.Drawing.Point(342, 212);
+            this.textBox4.Name = "textBox4";
+            this.textBox4.Size = new System.Drawing.Size(249, 27);
+            this.textBox4.TabIndex = 16;
+            // 
+            // button12
+            // 
+            this.button12.Location = new System.Drawing.Point(30, 260);
+            this.button12.Name = "button12";
+            this.button12.Size = new System.Drawing.Size(94, 29);
+            this.button12.TabIndex = 17;
+            this.button12.Text = "button12";
+            this.button12.UseVisualStyleBackColor = true;
+            this.button12.Click += new System.EventHandler(this.StartOrchestrator_Click);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 641);
+            this.ClientSize = new System.Drawing.Size(800, 740);
+            this.Controls.Add(this.button12);
+            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.button9);
@@ -255,5 +288,9 @@
         private Button button9;
         private Label label2;
         private Button button10;
+        private Button button11;
+        private FolderBrowserDialog folderBrowserDialog4;
+        private TextBox textBox4;
+        private Button button12;
     }
 }

@@ -7,6 +7,7 @@ namespace PowershellCommands
     {
         public string MaintenanceRootPath { get; set; }
         public string VueCoreRootPath { get; set; }
+        public string VueOrchestratorPath { get; set; }
 
         public Form1()
         {
@@ -14,12 +15,15 @@ namespace PowershellCommands
 
             MaintenanceRootPath = Properties.Settings.Default["MaintenanceRootFolder"]?.ToString() ?? "";
             VueCoreRootPath = Properties.Settings.Default["VueCoreRootFolder"]?.ToString() ?? "";
+            VueOrchestratorPath = Properties.Settings.Default["VueCoreRootFolder"]?.ToString() ?? "";
 
             textBox2.Text = MaintenanceRootPath;
             textBox3.Text = VueCoreRootPath;
+            textBox4.Text = VueOrchestratorPath;
 
             MaintenanceRootPath = MaintenanceRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
             VueCoreRootPath = VueCoreRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
+            VueOrchestratorPath = VueCoreRootPath.Replace(" ", "` ");
 
             UpdateDatabaseLabel();
 
@@ -248,6 +252,36 @@ namespace PowershellCommands
             {
                 label2.Text = "Currently using Staging DB";
             }
+        }
+
+        private void SelectOrchistratorPath_Click(object sender, EventArgs e)
+        {
+            using (var folderBrowserDialog = new FolderBrowserDialog())
+            {
+                DialogResult result = folderBrowserDialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                {
+                    // Update the TextBox with the selected folder path
+                    folderBrowserDialog4.SelectedPath = folderBrowserDialog.SelectedPath;
+
+                    // update UI
+                    textBox4.Text = folderBrowserDialog.SelectedPath;
+
+                    // Save the selected folder path to application settings
+                    Properties.Settings.Default["VueOrchestratorPath"] = folderBrowserDialog.SelectedPath;
+                    Properties.Settings.Default.Save();
+
+                    // Update path for current session
+                    VueOrchestratorPath = folderBrowserDialog.SelectedPath;
+                }
+            }
+        }
+
+        private void StartOrchestrator_Click(object sender, EventArgs e)
+        {
+            string command = $"cd {VueOrchestratorPath}; yarn dev";
+            RunPowerShellCommand(command);
         }
     }
 }

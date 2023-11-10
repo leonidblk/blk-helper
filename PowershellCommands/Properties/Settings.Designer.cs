@@ -46,5 +46,17 @@ namespace PowershellCommands.Properties {
                 this["VueCoreRootFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string VueOrchestratorPath {
+            get {
+                return ((string)(this["VueOrchestratorPath"]));
+            }
+            set {
+                this["VueOrchestratorPath"] = value;
+            }
+        }
     }
 }
