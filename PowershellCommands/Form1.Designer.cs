@@ -35,10 +35,10 @@
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.button5 = new System.Windows.Forms.Button();
-            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.maintenanceRootPathTextBox = new System.Windows.Forms.TextBox();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.button6 = new System.Windows.Forms.Button();
-            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.vueCoreRootPathTextBox = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog3 = new System.Windows.Forms.FolderBrowserDialog();
             this.button7 = new System.Windows.Forms.Button();
             this.button8 = new System.Windows.Forms.Button();
@@ -48,7 +48,7 @@
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
             this.folderBrowserDialog4 = new System.Windows.Forms.FolderBrowserDialog();
-            this.textBox4 = new System.Windows.Forms.TextBox();
+            this.vueOrchestratorPathTextBox = new System.Windows.Forms.TextBox();
             this.button12 = new System.Windows.Forms.Button();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
@@ -113,12 +113,12 @@
             // 
             // textBox2
             // 
-            this.textBox2.Location = new System.Drawing.Point(309, 369);
-            this.textBox2.Name = "textBox2";
-            this.textBox2.PlaceholderText = "Root path is empty";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(238, 27);
-            this.textBox2.TabIndex = 5;
+            this.maintenanceRootPathTextBox.Location = new System.Drawing.Point(309, 369);
+            this.maintenanceRootPathTextBox.Name = "textBox2";
+            this.maintenanceRootPathTextBox.PlaceholderText = "Root path is empty";
+            this.maintenanceRootPathTextBox.ReadOnly = true;
+            this.maintenanceRootPathTextBox.Size = new System.Drawing.Size(238, 27);
+            this.maintenanceRootPathTextBox.TabIndex = 5;
             // 
             // pictureBox1
             // 
@@ -140,12 +140,12 @@
             // 
             // textBox3
             // 
-            this.textBox3.Location = new System.Drawing.Point(245, 37);
-            this.textBox3.Name = "textBox3";
-            this.textBox3.PlaceholderText = "Root path is empty";
-            this.textBox3.ReadOnly = true;
-            this.textBox3.Size = new System.Drawing.Size(246, 27);
-            this.textBox3.TabIndex = 8;
+            this.vueCoreRootPathTextBox.Location = new System.Drawing.Point(245, 37);
+            this.vueCoreRootPathTextBox.Name = "textBox3";
+            this.vueCoreRootPathTextBox.PlaceholderText = "Root path is empty";
+            this.vueCoreRootPathTextBox.ReadOnly = true;
+            this.vueCoreRootPathTextBox.Size = new System.Drawing.Size(246, 27);
+            this.vueCoreRootPathTextBox.TabIndex = 8;
             // 
             // button7
             // 
@@ -219,10 +219,10 @@
             // 
             // textBox4
             // 
-            this.textBox4.Location = new System.Drawing.Point(342, 212);
-            this.textBox4.Name = "textBox4";
-            this.textBox4.Size = new System.Drawing.Size(249, 27);
-            this.textBox4.TabIndex = 16;
+            this.vueOrchestratorPathTextBox.Location = new System.Drawing.Point(342, 212);
+            this.vueOrchestratorPathTextBox.Name = "textBox4";
+            this.vueOrchestratorPathTextBox.Size = new System.Drawing.Size(249, 27);
+            this.vueOrchestratorPathTextBox.TabIndex = 16;
             // 
             // button12
             // 
@@ -240,7 +240,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 740);
             this.Controls.Add(this.button12);
-            this.Controls.Add(this.textBox4);
+            this.Controls.Add(this.vueOrchestratorPathTextBox);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
             this.Controls.Add(this.label2);
@@ -248,10 +248,10 @@
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button8);
             this.Controls.Add(this.button7);
-            this.Controls.Add(this.textBox3);
+            this.Controls.Add(this.vueCoreRootPathTextBox);
             this.Controls.Add(this.button6);
             this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.textBox2);
+            this.Controls.Add(this.maintenanceRootPathTextBox);
             this.Controls.Add(this.button5);
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.button4);
@@ -277,10 +277,10 @@
         private FolderBrowserDialog folderBrowserDialog1;
         private FolderBrowserDialog folderBrowserDialog2;
         private Button button5;
-        private TextBox textBox2;
+        private TextBox maintenanceRootPathTextBox;
         private PictureBox pictureBox1;
         private Button button6;
-        private TextBox textBox3;
+        private TextBox vueCoreRootPathTextBox;
         private FolderBrowserDialog folderBrowserDialog3;
         private Button button7;
         private Button button8;
@@ -290,7 +290,7 @@
         private Button button10;
         private Button button11;
         private FolderBrowserDialog folderBrowserDialog4;
-        private TextBox textBox4;
+        private TextBox vueOrchestratorPathTextBox;
         private Button button12;
     }
 }

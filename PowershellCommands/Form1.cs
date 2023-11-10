@@ -17,9 +17,9 @@ namespace PowershellCommands
             VueCoreRootPath = Properties.Settings.Default["VueCoreRootFolder"]?.ToString() ?? "";
             VueOrchestratorPath = Properties.Settings.Default["VueCoreRootFolder"]?.ToString() ?? "";
 
-            textBox2.Text = MaintenanceRootPath;
-            textBox3.Text = VueCoreRootPath;
-            textBox4.Text = VueOrchestratorPath;
+            maintenanceRootPathTextBox.Text = MaintenanceRootPath;
+            vueCoreRootPathTextBox.Text = VueCoreRootPath;
+            vueOrchestratorPathTextBox.Text = VueOrchestratorPath;
 
             MaintenanceRootPath = MaintenanceRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
             VueCoreRootPath = VueCoreRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
@@ -148,7 +148,7 @@ namespace PowershellCommands
                     folderBrowserDialog1.SelectedPath = folderBrowserDialog.SelectedPath;
 
                     // update UI
-                    textBox2.Text = folderBrowserDialog.SelectedPath;
+                    maintenanceRootPathTextBox.Text = folderBrowserDialog.SelectedPath;
 
                     // Save the selected folder path to application settings
                     Properties.Settings.Default["MaintenanceRootFolder"] = folderBrowserDialog.SelectedPath;
@@ -172,7 +172,7 @@ namespace PowershellCommands
                     folderBrowserDialog3.SelectedPath = folderBrowserDialog.SelectedPath;
 
                     // update UI
-                    textBox3.Text = folderBrowserDialog.SelectedPath;
+                    vueCoreRootPathTextBox.Text = folderBrowserDialog.SelectedPath;
 
                     // Save the selected folder path to application settings
                     Properties.Settings.Default["VueCoreRootFolder"] = folderBrowserDialog.SelectedPath;
@@ -266,7 +266,7 @@ namespace PowershellCommands
                     folderBrowserDialog4.SelectedPath = folderBrowserDialog.SelectedPath;
 
                     // update UI
-                    textBox4.Text = folderBrowserDialog.SelectedPath;
+                    vueOrchestratorPathTextBox.Text = folderBrowserDialog.SelectedPath;
 
                     // Save the selected folder path to application settings
                     Properties.Settings.Default["VueOrchestratorPath"] = folderBrowserDialog.SelectedPath;
