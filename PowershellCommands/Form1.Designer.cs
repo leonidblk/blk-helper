@@ -111,10 +111,10 @@
             this.button5.UseVisualStyleBackColor = true;
             this.button5.Click += new System.EventHandler(this.button5_Click);
             // 
-            // textBox2
+            // maintenanceRootPathTextBox
             // 
             this.maintenanceRootPathTextBox.Location = new System.Drawing.Point(309, 369);
-            this.maintenanceRootPathTextBox.Name = "textBox2";
+            this.maintenanceRootPathTextBox.Name = "maintenanceRootPathTextBox";
             this.maintenanceRootPathTextBox.PlaceholderText = "Root path is empty";
             this.maintenanceRootPathTextBox.ReadOnly = true;
             this.maintenanceRootPathTextBox.Size = new System.Drawing.Size(238, 27);
@@ -138,10 +138,10 @@
             this.button6.UseVisualStyleBackColor = true;
             this.button6.Click += new System.EventHandler(this.button6_Click);
             // 
-            // textBox3
+            // vueCoreRootPathTextBox
             // 
             this.vueCoreRootPathTextBox.Location = new System.Drawing.Point(245, 37);
-            this.vueCoreRootPathTextBox.Name = "textBox3";
+            this.vueCoreRootPathTextBox.Name = "vueCoreRootPathTextBox";
             this.vueCoreRootPathTextBox.PlaceholderText = "Root path is empty";
             this.vueCoreRootPathTextBox.ReadOnly = true;
             this.vueCoreRootPathTextBox.Size = new System.Drawing.Size(246, 27);
@@ -217,10 +217,10 @@
             this.button11.UseVisualStyleBackColor = true;
             this.button11.Click += new System.EventHandler(this.SelectOrchistratorPath_Click);
             // 
-            // textBox4
+            // vueOrchestratorPathTextBox
             // 
             this.vueOrchestratorPathTextBox.Location = new System.Drawing.Point(342, 212);
-            this.vueOrchestratorPathTextBox.Name = "textBox4";
+            this.vueOrchestratorPathTextBox.Name = "vueOrchestratorPathTextBox";
             this.vueOrchestratorPathTextBox.Size = new System.Drawing.Size(249, 27);
             this.vueOrchestratorPathTextBox.TabIndex = 16;
             // 
@@ -228,9 +228,9 @@
             // 
             this.button12.Location = new System.Drawing.Point(30, 260);
             this.button12.Name = "button12";
-            this.button12.Size = new System.Drawing.Size(94, 29);
+            this.button12.Size = new System.Drawing.Size(217, 29);
             this.button12.TabIndex = 17;
-            this.button12.Text = "button12";
+            this.button12.Text = "Start Orchestrator";
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.StartOrchestrator_Click);
             // 

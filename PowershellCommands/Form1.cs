@@ -15,7 +15,7 @@ namespace PowershellCommands
 
             MaintenanceRootPath = Properties.Settings.Default["MaintenanceRootFolder"]?.ToString() ?? "";
             VueCoreRootPath = Properties.Settings.Default["VueCoreRootFolder"]?.ToString() ?? "";
-            VueOrchestratorPath = Properties.Settings.Default["VueCoreRootFolder"]?.ToString() ?? "";
+            VueOrchestratorPath = Properties.Settings.Default["VueOrchestratorPath"]?.ToString() ?? "";
 
             maintenanceRootPathTextBox.Text = MaintenanceRootPath;
             vueCoreRootPathTextBox.Text = VueCoreRootPath;
@@ -23,7 +23,7 @@ namespace PowershellCommands
 
             MaintenanceRootPath = MaintenanceRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
             VueCoreRootPath = VueCoreRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
-            VueOrchestratorPath = VueCoreRootPath.Replace(" ", "` ");
+            VueOrchestratorPath = VueOrchestratorPath.Replace(" ", "` ");
 
             UpdateDatabaseLabel();
 
@@ -124,7 +124,7 @@ namespace PowershellCommands
         }
 
 
-        private void RunPowerShellCommand(string command)
+        private void RunPowerShellCommand(string command, string workingDirectory = "")
         {
             ProcessStartInfo processInfo = new ProcessStartInfo("powershell.exe")
             {
@@ -132,6 +132,11 @@ namespace PowershellCommands
                 UseShellExecute = false,
                 CreateNoWindow = false
             };
+
+            if (!string.IsNullOrEmpty(workingDirectory))
+            {
+                processInfo.WorkingDirectory = workingDirectory;
+            }
 
             Process.Start(processInfo);
         }
@@ -186,7 +191,10 @@ namespace PowershellCommands
 
         private void ConnectToStagingDb_Click(object sender, EventArgs e)
         {
-            var appSettingsPath = @"C:\Users\Leonid XPS 15\Documents\GitHub\Api\Maintenance\src\BuildingLink.Maintenance.Api\appsettings.Local.json";
+            var cleanedMaintenanceRootPath = MaintenanceRootPath.Replace("`", "");
+
+            var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
+
             try
             {
                 // Read the existing configuration
@@ -212,7 +220,10 @@ namespace PowershellCommands
 
         private void ConnectToLocalDatabase_Click(object sender, EventArgs e)
         {
-            var appSettingsPath = @"C:\Users\Leonid XPS 15\Documents\GitHub\Api\Maintenance\src\BuildingLink.Maintenance.Api\appsettings.Local.json";
+            var cleanedMaintenanceRootPath = MaintenanceRootPath.Replace("`", "");
+
+            var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
+
             try
             {
                 // Read the existing configuration
@@ -238,21 +249,38 @@ namespace PowershellCommands
 
         private void UpdateDatabaseLabel()
         {
-            var appSettingsPath = @"C:\Users\Leonid XPS 15\Documents\GitHub\Api\Maintenance\src\BuildingLink.Maintenance.Api\appsettings.Local.json";
-            var json = File.ReadAllText(appSettingsPath);
-            dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-            var connectionString = jsonObj["ConnectionStrings"]["Maintenance"].ToString();
+            var cleanedMaintenanceRootPath = MaintenanceRootPath.Replace("`", "");
 
-            // Set label text based on the connection string
-            if (connectionString.Contains("localhost"))
+            var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
+
+            // Check if the path exists
+            if (!File.Exists(appSettingsPath))
             {
-                label2.Text = "Currently using Local DB";
+                MessageBox.Show($"The path to the app settings file does not exist: {appSettingsPath}", "Path Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
             }
-            else
+
+            try
             {
-                label2.Text = "Currently using Staging DB";
+                var json = File.ReadAllText(appSettingsPath);
+                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+                var connectionString = jsonObj["ConnectionStrings"]["Maintenance"].ToString();
+
+                if (connectionString.Contains("localhost"))
+                {
+                    label2.Text = "Currently using Local DB";
+                }
+                else
+                {
+                    label2.Text = "Currently using Staging DB";
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while reading the app settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
+
 
         private void SelectOrchistratorPath_Click(object sender, EventArgs e)
         {
@@ -280,8 +308,32 @@ namespace PowershellCommands
 
         private void StartOrchestrator_Click(object sender, EventArgs e)
         {
-            string command = $"cd {VueOrchestratorPath}; yarn dev";
-            RunPowerShellCommand(command);
+            // Remove backticks from the VueOrchestratorPath
+            var cleanedVueOrchestratorPath = VueOrchestratorPath.Replace("`", "");
+
+            // Using string interpolation to create the file path
+            var jsonFilePath = $"{cleanedVueOrchestratorPath}\\src\\import-map.local.json";
+
+            try
+            {
+                var json = File.ReadAllText(jsonFilePath);
+                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+
+                // Add or update the entry in the JSON file
+                jsonObj["imports"]["@buildinglink/bl-website-core-micro"] = "http://localhost:3000/js/index.vdev.js";
+
+                // Serialize and write the JSON back to the file
+                string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
+                File.WriteAllText(jsonFilePath, output);
+
+                // Run the yarn dev command, ensuring the path is enclosed in quotes
+                string command = "yarn dev";
+                RunPowerShellCommand(command, cleanedVueOrchestratorPath);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }
