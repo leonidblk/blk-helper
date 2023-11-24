@@ -61,7 +61,7 @@
             this.button1.TabIndex = 0;
             this.button1.Text = "Start Vue website";
             this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.ButtonCoreDev_Click);
+            this.button1.Click += new System.EventHandler(this.ButtonRunCoreMicro_Click);
             // 
             // button2
             // 
@@ -81,7 +81,7 @@
             this.button3.TabIndex = 2;
             this.button3.Text = "Run Maintenance API";
             this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.ButtonRunApp_Click);
+            this.button3.Click += new System.EventHandler(this.ButtonRunMaintApi_Click);
             // 
             // button4
             // 
@@ -91,7 +91,7 @@
             this.button4.TabIndex = 3;
             this.button4.Text = "Add migration";
             this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.buttonAddMigration_Click);
+            this.button4.Click += new System.EventHandler(this.ButtonAddMigration_Click);
             // 
             // textBox1
             // 
@@ -109,7 +109,7 @@
             this.button5.TabIndex = 4;
             this.button5.Text = "Select Maintenance Root Folder";
             this.button5.UseVisualStyleBackColor = true;
-            this.button5.Click += new System.EventHandler(this.button5_Click);
+            this.button5.Click += new System.EventHandler(this.ButtonSaveMaintenanceRootPath_Click);
             // 
             // maintenanceRootPathTextBox
             // 
@@ -134,9 +134,9 @@
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(200, 34);
             this.button6.TabIndex = 7;
-            this.button6.Text = "Select Core Root Folder";
+            this.button6.Text = "Select Core Micro Root Folder";
             this.button6.UseVisualStyleBackColor = true;
-            this.button6.Click += new System.EventHandler(this.button6_Click);
+            this.button6.Click += new System.EventHandler(this.ButtonSaveVueCoreMicroRootPath_Click);
             // 
             // vueCoreRootPathTextBox
             // 
@@ -155,7 +155,7 @@
             this.button7.TabIndex = 9;
             this.button7.Text = "Connect to staging maintenance api";
             this.button7.UseVisualStyleBackColor = true;
-            this.button7.Click += new System.EventHandler(this.button7_Click);
+            this.button7.Click += new System.EventHandler(this.ButtonConnectStagingMaintApi_Click);
             // 
             // button8
             // 
@@ -165,7 +165,7 @@
             this.button8.TabIndex = 10;
             this.button8.Text = "Connect to local maintenance api";
             this.button8.UseVisualStyleBackColor = true;
-            this.button8.Click += new System.EventHandler(this.button8_Click);
+            this.button8.Click += new System.EventHandler(this.ButtonConnectLocalMaintApi_Click);
             // 
             // label1
             // 
@@ -223,6 +223,7 @@
             this.vueOrchestratorPathTextBox.Name = "vueOrchestratorPathTextBox";
             this.vueOrchestratorPathTextBox.Size = new System.Drawing.Size(249, 27);
             this.vueOrchestratorPathTextBox.TabIndex = 16;
+            this.vueOrchestratorPathTextBox.ReadOnly = true;
             // 
             // button12
             // 

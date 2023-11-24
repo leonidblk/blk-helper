@@ -6,7 +6,8 @@ namespace PowershellCommands
     public partial class Form1 : Form
     {
         public string MaintenanceRootPath { get; set; }
-        public string VueCoreRootPath { get; set; }
+        //public string VueCoreRootPath { get; set; }
+        public string VueCoreMicroRootPath { get; set; }
         public string VueOrchestratorPath { get; set; }
 
         public Form1()
@@ -14,55 +15,43 @@ namespace PowershellCommands
             InitializeComponent();
 
             MaintenanceRootPath = Properties.Settings.Default["MaintenanceRootFolder"]?.ToString() ?? "";
-            VueCoreRootPath = Properties.Settings.Default["VueCoreRootFolder"]?.ToString() ?? "";
+            VueCoreMicroRootPath = Properties.Settings.Default["VueCoreMicroRootFolder"]?.ToString() ?? "";
             VueOrchestratorPath = Properties.Settings.Default["VueOrchestratorPath"]?.ToString() ?? "";
 
             maintenanceRootPathTextBox.Text = MaintenanceRootPath;
-            vueCoreRootPathTextBox.Text = VueCoreRootPath;
+            vueCoreRootPathTextBox.Text = VueCoreMicroRootPath;
             vueOrchestratorPathTextBox.Text = VueOrchestratorPath;
 
-            MaintenanceRootPath = MaintenanceRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
-            VueCoreRootPath = VueCoreRootPath.Replace(" ", "` "); // Format blank spaces so error does not occur
+            // Format blank spaces so error does not occur
+            MaintenanceRootPath = MaintenanceRootPath.Replace(" ", "` ");
+            VueCoreMicroRootPath = VueCoreMicroRootPath.Replace(" ", "` ");
             VueOrchestratorPath = VueOrchestratorPath.Replace(" ", "` ");
 
             UpdateDatabaseLabel();
-
-            // var icon = 
-            // pictureBox1.Image = Properties.Settings.Default["MaintenanceRootFolder"] ? Properties.Resources.
         }
 
-        private void ButtonCoreDev_Click(object sender, EventArgs e)
+        private void ButtonRunCoreMicro_Click(object sender, EventArgs e)
         {
-            // Run the "Core dev" command
-            string command = $"cd {VueCoreRootPath}; yarn dev";
-            RunPowerShellCommand(command);
+            var cleanedVueCoreMicroRootPath = VueCoreMicroRootPath.Replace("`", "");
+            var finalFilePath = $"{cleanedVueCoreMicroRootPath}";
+            string command = $"cd {cleanedVueCoreMicroRootPath}; yarn dev";
+            RunPowerShellCommand(command, finalFilePath);
         }
 
-        // EF database update
         private void ButtonMaintenanceMigration_Click(object sender, EventArgs e)
         {
-            // Run the "Maintenance migration" command
             string command = $"cd {MaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api; $env:ASPNETCORE_ENVIRONMENT = 'Local'; dotnet ef database update";
             RunPowerShellCommand(command);
         }
 
-        // Dotnet run API
-        private void ButtonRunApp_Click(object sender, EventArgs e)
+        private void ButtonRunMaintApi_Click(object sender, EventArgs e)
         {
             string command = $"cd {MaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api; dotnet run";
 
             RunPowerShellCommand(command);
         }
 
-        // Run bl website core
-        private void button4_Click(object sender, EventArgs e)
-        {
-            string command = "cd C:\\Users\\Leonid` XPS` 15\\Documents\\GitHub\\Vue\\bl-website-core; dir";
-            RunPowerShellCommand(command);
-        }
-
-        // Add migration
-        private void buttonAddMigration_Click(object sender, EventArgs e)
+        private void ButtonAddMigration_Click(object sender, EventArgs e)
         {
             string migrationName = textBox1.Text.Trim();
             if (string.IsNullOrEmpty(migrationName))
@@ -71,7 +60,6 @@ namespace PowershellCommands
                 return;
             }
 
-            // Display confirmation dialog
             DialogResult result = MessageBox.Show($"Are you sure you want to add the migration '{migrationName}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
@@ -85,30 +73,34 @@ namespace PowershellCommands
             }
         }
 
-        private void button7_Click(object sender, EventArgs e)
+        private void ButtonConnectStagingMaintApi_Click(object sender, EventArgs e)
         {
-            var pathToFile = $"{VueCoreRootPath}\\config\\env-settings-local.yaml";
+            var pathToFile = $"{VueCoreMicroRootPath}\\config\\env-settings-local.yaml";
 
             var command3 = $"\\\"\\\" | Set-Content -Path {pathToFile}";
 
             RunPowerShellCommand(command3);
         }
 
-        // Connect to local maintenance api
-        private void button8_Click(object sender, EventArgs e)
+        private void ButtonConnectLocalMaintApi_Click(object sender, EventArgs e)
         {
-            var newConfiguration = @"development:
+            var newConfiguration = @"vdev:
               VUE_APP:
-               AUTH:
-                BASE_URL: https://auth-vqa.buildinglink.com
-               API:
-                BASE_URL: https://bl-api-mgmt-vqa.azure-api.net
-                TRANSFORM_URL_CONFIG: '[{
-                  ""search_string"": ""Maintenance/PropertyEmployee/v4"", 
-                  ""config_key"": ""MAINTENANCE_API_BASE_URL""}]'
-                MAINTENANCE_API_BASE_URL: https://localhost:5005";
+                CLOGD_URL: https://clogdd.buildinglink.com/clog
+                FEATURE_FLAG_SERVICE_ID: TMyQdQSEZLCAPQv4TLQJ2s
+                GOOGLE_TAG_MANAGER_ID: GTM-NTF2QDT
+                V2_BASE_URL: https://vdev.buildinglink.com
+                AUTH:
+                  BASE_URL: https://auth-vdev.buildinglink.com
+                  CLIENT_ID: bldev-5dea8e3878e1cf10b8bc62e6
+                API:
+                  BASE_URL: https://bl-api-mgmt-vqa.azure-api.net
+                  SUBSCRIPTION_KEY: e65946e054924df0a76ccdc6b2304a8b
+                  DEVICE_ID: 79A4A391-EBA0-44DA-AD1B-CEEFDC3C370C
+                  TRANSFORM_URL_CONFIG: '[{""search_string"": ""Maintenance/PropertyEmployee/v4"",""config_key"": ""MAINTENANCE_API_BASE_URL""}]'
+                  MAINTENANCE_API_BASE_URL: https://localhost:5005";
 
-            var pathToFile = $"{VueCoreRootPath}\\config\\env-settings-local.yaml";
+            var pathToFile = $"{VueCoreMicroRootPath}\\config\\env-settings-local.yaml";
 
             try
             {
@@ -141,7 +133,7 @@ namespace PowershellCommands
             Process.Start(processInfo);
         }
 
-        private void button5_Click(object sender, EventArgs e)
+        private void ButtonSaveMaintenanceRootPath_Click(object sender, EventArgs e)
         {
             using (var folderBrowserDialog = new FolderBrowserDialog())
             {
@@ -149,23 +141,19 @@ namespace PowershellCommands
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
                 {
-                    // Update the TextBox with the selected folder path
                     folderBrowserDialog1.SelectedPath = folderBrowserDialog.SelectedPath;
 
-                    // update UI
                     maintenanceRootPathTextBox.Text = folderBrowserDialog.SelectedPath;
 
-                    // Save the selected folder path to application settings
                     Properties.Settings.Default["MaintenanceRootFolder"] = folderBrowserDialog.SelectedPath;
                     Properties.Settings.Default.Save();
 
-                    // Update path for current session
                     MaintenanceRootPath = folderBrowserDialog.SelectedPath;
                 }
             }
         }
 
-        private void button6_Click(object sender, EventArgs e)
+        private void ButtonSaveVueCoreMicroRootPath_Click(object sender, EventArgs e)
         {
             using (var folderBrowserDialog = new FolderBrowserDialog())
             {
@@ -173,18 +161,14 @@ namespace PowershellCommands
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
                 {
-                    // Update the TextBox with the selected folder path
                     folderBrowserDialog3.SelectedPath = folderBrowserDialog.SelectedPath;
 
-                    // update UI
                     vueCoreRootPathTextBox.Text = folderBrowserDialog.SelectedPath;
 
-                    // Save the selected folder path to application settings
-                    Properties.Settings.Default["VueCoreRootFolder"] = folderBrowserDialog.SelectedPath;
+                    Properties.Settings.Default["VueCoreMicroRootFolder"] = folderBrowserDialog.SelectedPath;
                     Properties.Settings.Default.Save();
 
-                    // Update path for current session
-                    VueCoreRootPath = folderBrowserDialog.SelectedPath;
+                    VueCoreMicroRootPath = folderBrowserDialog.SelectedPath;
                 }
             }
         }
@@ -197,14 +181,11 @@ namespace PowershellCommands
 
             try
             {
-                // Read the existing configuration
                 var json = File.ReadAllText(appSettingsPath);
                 dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
-                // Modify the connection string
                 jsonObj["ConnectionStrings"]["Maintenance"] = "Data Source=tcp:SqlCoreDevAGL.buildinglink.local,1433;Initial Catalog=Maintenance;User ID=maintenance;Password=76Ya#12jmhd#;Max Pool Size=10000;MultipleActiveResultSets=True;Connect Timeout=5;Application Name=BuildingLink.Maintenance.Api;ApplicationIntent=ReadWrite;MultiSubnetFailover=True;ConnectRetryCount=20;ConnectRetryInterval=1;Encrypt=True;TrustServerCertificate=True;";
 
-                // Write the updated configuration back to the file
                 string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(appSettingsPath, output);
 
@@ -226,14 +207,11 @@ namespace PowershellCommands
 
             try
             {
-                // Read the existing configuration
                 var json = File.ReadAllText(appSettingsPath);
                 dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
-                // Modify the connection string
                 jsonObj["ConnectionStrings"]["Maintenance"] = "Data Source=localhost;Initial Catalog=Maintenance;User ID=sa;Password=Password1!;Encrypt=True;TrustServerCertificate=True;";
 
-                // Write the updated configuration back to the file
                 string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(appSettingsPath, output);
 
@@ -253,7 +231,6 @@ namespace PowershellCommands
 
             var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
 
-            // Check if the path exists
             if (!File.Exists(appSettingsPath))
             {
                 MessageBox.Show($"The path to the app settings file does not exist: {appSettingsPath}", "Path Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -290,17 +267,13 @@ namespace PowershellCommands
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
                 {
-                    // Update the TextBox with the selected folder path
                     folderBrowserDialog4.SelectedPath = folderBrowserDialog.SelectedPath;
 
-                    // update UI
                     vueOrchestratorPathTextBox.Text = folderBrowserDialog.SelectedPath;
 
-                    // Save the selected folder path to application settings
                     Properties.Settings.Default["VueOrchestratorPath"] = folderBrowserDialog.SelectedPath;
                     Properties.Settings.Default.Save();
 
-                    // Update path for current session
                     VueOrchestratorPath = folderBrowserDialog.SelectedPath;
                 }
             }
@@ -308,10 +281,8 @@ namespace PowershellCommands
 
         private void StartOrchestrator_Click(object sender, EventArgs e)
         {
-            // Remove backticks from the VueOrchestratorPath
             var cleanedVueOrchestratorPath = VueOrchestratorPath.Replace("`", "");
 
-            // Using string interpolation to create the file path
             var jsonFilePath = $"{cleanedVueOrchestratorPath}\\src\\import-map.local.json";
 
             try
@@ -319,14 +290,11 @@ namespace PowershellCommands
                 var json = File.ReadAllText(jsonFilePath);
                 dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
 
-                // Add or update the entry in the JSON file
                 jsonObj["imports"]["@buildinglink/bl-website-core-micro"] = "http://localhost:3000/js/index.vdev.js";
 
-                // Serialize and write the JSON back to the file
                 string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
                 File.WriteAllText(jsonFilePath, output);
 
-                // Run the yarn dev command, ensuring the path is enclosed in quotes
                 string command = "yarn dev";
                 RunPowerShellCommand(command, cleanedVueOrchestratorPath);
             }
