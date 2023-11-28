@@ -1,4 +1,5 @@
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace PowershellCommands
@@ -6,7 +7,6 @@ namespace PowershellCommands
     public partial class Form1 : Form
     {
         public string MaintenanceRootPath { get; set; }
-        //public string VueCoreRootPath { get; set; }
         public string VueCoreMicroRootPath { get; set; }
         public string VueOrchestratorPath { get; set; }
 
@@ -24,10 +24,11 @@ namespace PowershellCommands
 
             // Format blank spaces so error does not occur
             MaintenanceRootPath = MaintenanceRootPath.Replace(" ", "` ");
-            VueCoreMicroRootPath = VueCoreMicroRootPath.Replace(" ", "` ");
+            // VueCoreMicroRootPath = VueCoreMicroRootPath.Replace(" ", "` ");
             VueOrchestratorPath = VueOrchestratorPath.Replace(" ", "` ");
 
             UpdateDatabaseLabel();
+            UpdateVueConnectionLabel();
         }
 
         private void ButtonRunCoreMicro_Click(object sender, EventArgs e)
@@ -77,9 +78,26 @@ namespace PowershellCommands
         {
             var pathToFile = $"{VueCoreMicroRootPath}\\config\\env-settings-local.yaml";
 
-            var command3 = $"\\\"\\\" | Set-Content -Path {pathToFile}";
+            try
+            {
+                var lines = File.ReadAllLines(pathToFile);
 
-            RunPowerShellCommand(command3);
+                // Comment out all lines
+                for (int i = 0; i < lines.Length; i++)
+                {
+                    lines[i] = "#" + lines[i];
+                }
+
+                File.WriteAllLines(pathToFile, lines);
+
+                MessageBox.Show("All lines in the configuration file have been commented out.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+
+            UpdateVueConnectionLabel();
         }
 
         private void ButtonConnectLocalMaintApi_Click(object sender, EventArgs e)
@@ -108,13 +126,14 @@ namespace PowershellCommands
                 File.WriteAllText(pathToFile.Replace("` ", " "), newConfiguration);
                 MessageBox.Show("Configuration successfully changed to point to local maintenance api!.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
 
+                UpdateVueConnectionLabel();
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
-
 
         private void RunPowerShellCommand(string command, string workingDirectory = "")
         {
@@ -258,6 +277,39 @@ namespace PowershellCommands
             }
         }
 
+        private void UpdateVueConnectionLabel()
+        {
+            var vueConnectionConfigPath = $"{VueCoreMicroRootPath}\\config\\env-settings-local.yaml";
+
+            if (!File.Exists(vueConnectionConfigPath))
+            {
+                MessageBox.Show($"The path to the Vue connection config file does not exist: {vueConnectionConfigPath}", "Path Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                var configContent = File.ReadAllText(vueConnectionConfigPath);
+                string localHostNotCommentedPattern = @"^[^#]*localhost";
+
+                bool isConnectedToLocal = Regex.IsMatch(configContent, localHostNotCommentedPattern, RegexOptions.Multiline);
+
+                if (isConnectedToLocal)
+                {
+                    label3.Text = "Connected to Local API";
+                    label3.ForeColor = Color.Green;
+                }
+                else
+                {
+                    label3.Text = "Connected to Staging API";
+                    label3.ForeColor = Color.Blue;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while reading the Vue connection settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
 
         private void SelectOrchistratorPath_Click(object sender, EventArgs e)
         {

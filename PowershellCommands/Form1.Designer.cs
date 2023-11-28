@@ -50,6 +50,7 @@
             this.folderBrowserDialog4 = new System.Windows.Forms.FolderBrowserDialog();
             this.vueOrchestratorPathTextBox = new System.Windows.Forms.TextBox();
             this.button12 = new System.Windows.Forms.Button();
+            this.label3 = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -221,9 +222,9 @@
             // 
             this.vueOrchestratorPathTextBox.Location = new System.Drawing.Point(342, 212);
             this.vueOrchestratorPathTextBox.Name = "vueOrchestratorPathTextBox";
+            this.vueOrchestratorPathTextBox.ReadOnly = true;
             this.vueOrchestratorPathTextBox.Size = new System.Drawing.Size(249, 27);
             this.vueOrchestratorPathTextBox.TabIndex = 16;
-            this.vueOrchestratorPathTextBox.ReadOnly = true;
             // 
             // button12
             // 
@@ -235,11 +236,23 @@
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.StartOrchestrator_Click);
             // 
+            // label3
+            // 
+            this.label3.AutoSize = true;
+            this.label3.Location = new System.Drawing.Point(291, 150);
+            this.label3.Name = "label3";
+            this.label3.Size = new System.Drawing.Size(50, 20);
+            this.label3.TabIndex = 18;
+            this.label3.Text = "Connected to";
+            this.label3.ForeColor = System.Drawing.Color.Red;
+            this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 740);
+            this.Controls.Add(this.label3);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.vueOrchestratorPathTextBox);
             this.Controls.Add(this.button11);
@@ -293,5 +306,6 @@
         private FolderBrowserDialog folderBrowserDialog4;
         private TextBox vueOrchestratorPathTextBox;
         private Button button12;
+        private Label label3;
     }
 }
