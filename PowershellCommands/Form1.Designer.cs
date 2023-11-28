@@ -28,7 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.button1 = new System.Windows.Forms.Button();
+            this.startVueWebsiteButton = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.button4 = new System.Windows.Forms.Button();
@@ -44,25 +44,25 @@
             this.button8 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.button9 = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
+            this.maintDbConnectionStatusLable = new System.Windows.Forms.Label();
             this.button10 = new System.Windows.Forms.Button();
             this.button11 = new System.Windows.Forms.Button();
-            this.folderBrowserDialog4 = new System.Windows.Forms.FolderBrowserDialog();
+            this.vueOrchestratorFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.vueOrchestratorPathTextBox = new System.Windows.Forms.TextBox();
             this.button12 = new System.Windows.Forms.Button();
-            this.label3 = new System.Windows.Forms.Label();
+            this.maintApiConnectionStatusLablel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(30, 143);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(200, 35);
-            this.button1.TabIndex = 0;
-            this.button1.Text = "Start Vue website";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.ButtonRunCoreMicro_Click);
+            this.startVueWebsiteButton.Location = new System.Drawing.Point(30, 143);
+            this.startVueWebsiteButton.Name = "startVueWebsiteButton";
+            this.startVueWebsiteButton.Size = new System.Drawing.Size(200, 35);
+            this.startVueWebsiteButton.TabIndex = 0;
+            this.startVueWebsiteButton.Text = "Start Vue website";
+            this.startVueWebsiteButton.UseVisualStyleBackColor = true;
+            this.startVueWebsiteButton.Click += new System.EventHandler(this.ButtonRunCoreMicro_Click);
             // 
             // button2
             // 
@@ -189,14 +189,14 @@
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-            this.label2.ForeColor = System.Drawing.Color.Red;
-            this.label2.Location = new System.Drawing.Point(30, 652);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(114, 20);
-            this.label2.TabIndex = 13;
-            this.label2.Text = "Connected to...";
+            this.maintDbConnectionStatusLable.AutoSize = true;
+            this.maintDbConnectionStatusLable.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.maintDbConnectionStatusLable.ForeColor = System.Drawing.Color.Red;
+            this.maintDbConnectionStatusLable.Location = new System.Drawing.Point(30, 652);
+            this.maintDbConnectionStatusLable.Name = "label2";
+            this.maintDbConnectionStatusLable.Size = new System.Drawing.Size(114, 20);
+            this.maintDbConnectionStatusLable.TabIndex = 13;
+            this.maintDbConnectionStatusLable.Text = "Connected to...";
             // 
             // button10
             // 
@@ -238,26 +238,26 @@
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(291, 150);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(50, 20);
-            this.label3.TabIndex = 18;
-            this.label3.Text = "Connected to";
-            this.label3.ForeColor = System.Drawing.Color.Red;
-            this.label3.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.maintApiConnectionStatusLablel.AutoSize = true;
+            this.maintApiConnectionStatusLablel.Location = new System.Drawing.Point(291, 150);
+            this.maintApiConnectionStatusLablel.Name = "label3";
+            this.maintApiConnectionStatusLablel.Size = new System.Drawing.Size(50, 20);
+            this.maintApiConnectionStatusLablel.TabIndex = 18;
+            this.maintApiConnectionStatusLablel.Text = "Connected to";
+            this.maintApiConnectionStatusLablel.ForeColor = System.Drawing.Color.Red;
+            this.maintApiConnectionStatusLablel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 740);
-            this.Controls.Add(this.label3);
+            this.Controls.Add(this.maintApiConnectionStatusLablel);
             this.Controls.Add(this.button12);
             this.Controls.Add(this.vueOrchestratorPathTextBox);
             this.Controls.Add(this.button11);
             this.Controls.Add(this.button10);
-            this.Controls.Add(this.label2);
+            this.Controls.Add(this.maintDbConnectionStatusLable);
             this.Controls.Add(this.button9);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button8);
@@ -271,19 +271,37 @@
             this.Controls.Add(this.button4);
             this.Controls.Add(this.button3);
             this.Controls.Add(this.button2);
-            this.Controls.Add(this.button1);
+            this.Controls.Add(this.startVueWebsiteButton);
             this.Name = "Form1";
             this.Text = "Form1";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
+            InitializeButtons();
+        }
+
+        private void InitializeButtons()
+        {
+            int standardButtonHeight = 30;
+            this.startVueWebsiteButton.Size = new Size(this.startVueWebsiteButton.Size.Width, standardButtonHeight);
+            this.button2.Size = new Size(this.button2.Size.Width, standardButtonHeight);
+            this.button3.Size = new Size(this.button3.Size.Width, standardButtonHeight);
+            this.button4.Size = new Size(this.button4.Size.Width, standardButtonHeight);
+            this.button5.Size = new Size(this.button5.Size.Width, standardButtonHeight);
+            this.button6.Size = new Size(this.button6.Size.Width, standardButtonHeight);
+            this.button7.Size = new Size(this.button7.Size.Width, standardButtonHeight);
+            this.button8.Size = new Size(this.button8.Size.Width, standardButtonHeight);
+            this.button9.Size = new Size(this.button9.Size.Width, standardButtonHeight);
+            this.button10.Size = new Size(this.button10.Size.Width, standardButtonHeight);
+            this.button11.Size = new Size(this.button11.Size.Width, standardButtonHeight);
+            this.button12.Size = new Size(this.button12.Size.Width, standardButtonHeight);
         }
 
         #endregion
 
         private ListBox listBoxCommands;
-        private Button button1;
+        private Button startVueWebsiteButton;
         private Button button2;
         private Button button3;
         private Button button4;
@@ -300,12 +318,12 @@
         private Button button8;
         private Label label1;
         private Button button9;
-        private Label label2;
+        private Label maintDbConnectionStatusLable;
         private Button button10;
         private Button button11;
-        private FolderBrowserDialog folderBrowserDialog4;
+        private FolderBrowserDialog vueOrchestratorFolderBrowserDialog;
         private TextBox vueOrchestratorPathTextBox;
         private Button button12;
-        private Label label3;
+        private Label maintApiConnectionStatusLablel;
     }
 }

@@ -264,11 +264,11 @@ namespace PowershellCommands
 
                 if (connectionString.Contains("localhost"))
                 {
-                    label2.Text = "Currently using Local DB";
+                    maintDbConnectionStatusLable.Text = "Currently using Local DB";
                 }
                 else
                 {
-                    label2.Text = "Currently using Staging DB";
+                    maintDbConnectionStatusLable.Text = "Currently using Staging DB";
                 }
             }
             catch (Exception ex)
@@ -296,13 +296,13 @@ namespace PowershellCommands
 
                 if (isConnectedToLocal)
                 {
-                    label3.Text = "Connected to Local API";
-                    label3.ForeColor = Color.Green;
+                    maintApiConnectionStatusLablel.Text = "Connected to Local API";
+                    maintApiConnectionStatusLablel.ForeColor = Color.Green;
                 }
                 else
                 {
-                    label3.Text = "Connected to Staging API";
-                    label3.ForeColor = Color.Blue;
+                    maintApiConnectionStatusLablel.Text = "Connected to Staging API";
+                    maintApiConnectionStatusLablel.ForeColor = Color.Blue;
                 }
             }
             catch (Exception ex)
@@ -319,7 +319,7 @@ namespace PowershellCommands
 
                 if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
                 {
-                    folderBrowserDialog4.SelectedPath = folderBrowserDialog.SelectedPath;
+                    vueOrchestratorFolderBrowserDialog.SelectedPath = folderBrowserDialog.SelectedPath;
 
                     vueOrchestratorPathTextBox.Text = folderBrowserDialog.SelectedPath;
 
