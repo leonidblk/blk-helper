@@ -64,7 +64,7 @@ namespace PowershellCommands
             DialogResult result = MessageBox.Show($"Are you sure you want to add the migration '{migrationName}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                string command = $"cd {MaintenanceRootPath}\\Maintenance\\src\\BuildingLink.Maintenance.Api; " +
+                string command = $"cd {MaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api; " +
                  "$env:ASPNETCORE_ENVIRONMENT = 'Local'; " +
                  "dotnet ef migrations add " + migrationName +
                  " --project ..\\BuildingLink.Maintenance.Repositories\\" +
