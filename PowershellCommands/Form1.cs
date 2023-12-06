@@ -1,10 +1,11 @@
+using MaterialSkin.Controls;
 using System.Diagnostics;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace PowershellCommands
 {
-    public partial class Form1 : Form
+    public partial class Form1 : MaterialForm
     {
         public string MaintenanceRootPath { get; set; }
         public string VueCoreMicroRootPath { get; set; }
