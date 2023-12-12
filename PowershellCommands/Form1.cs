@@ -42,8 +42,34 @@ namespace PowershellCommands
 
         private void ButtonMaintenanceMigration_Click(object sender, EventArgs e)
         {
-            string command = $"cd {MaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api; $env:ASPNETCORE_ENVIRONMENT = 'Local'; dotnet ef database update";
-            RunPowerShellCommand(command);
+            var cleanedMaintenanceRootPath = MaintenanceRootPath.Replace("`", "");
+            var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
+
+            if (!File.Exists(appSettingsPath))
+            {
+                MessageBox.Show("App settings file not found.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                var json = File.ReadAllText(appSettingsPath);
+                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
+                var connectionString = jsonObj["ConnectionStrings"]["Maintenance"].ToString();
+
+                if (!connectionString.Contains("localhost"))
+                {
+                    MessageBox.Show("Cannot perform migration: not connected to a local database.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    throw new InvalidOperationException("Migration aborted: not connected to a local database.");
+                }
+
+                string command = $"cd {MaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api; $env:ASPNETCORE_ENVIRONMENT = 'Local'; dotnet ef database update";
+                RunPowerShellCommand(command);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
 
         private void ButtonRunMaintApi_Click(object sender, EventArgs e)
