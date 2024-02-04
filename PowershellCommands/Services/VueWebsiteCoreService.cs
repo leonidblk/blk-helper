@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace PowershellCommands.Services
@@ -64,6 +65,25 @@ namespace PowershellCommands.Services
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred: {ex.Message}");
+            }
+        }
+
+        public string GetVueConnectionStatus()
+        {
+            var vueConnectionConfigPath = $"{_paths.VueCoreMicroRootPath}\\config\\env-settings-local.yaml";
+
+            var configContent = File.ReadAllText(vueConnectionConfigPath);
+            string localHostNotCommentedPattern = @"^[^#]*localhost";
+
+            bool isConnectedToLocal = Regex.IsMatch(configContent, localHostNotCommentedPattern, RegexOptions.Multiline);
+
+            if (isConnectedToLocal)
+            {
+                return "Connected to Local API";
+            }
+            else
+            {
+                return "Connected to Staging API";
             }
         }
     }

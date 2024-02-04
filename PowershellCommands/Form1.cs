@@ -148,121 +148,30 @@ namespace PowershellCommands
 
         private void ConnectToStagingDb_Click(object sender, EventArgs e)
         {
-            var cleanedMaintenanceRootPath = MaintenanceRootPath.Replace("`", "");
-
-            var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
-
-            try
-            {
-                var json = File.ReadAllText(appSettingsPath);
-                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-
-                jsonObj["ConnectionStrings"]["Maintenance"] = "Data Source=tcp:SqlCoreDevAGL.buildinglink.local,1433;Initial Catalog=Maintenance;User ID=maintenance;Password=76Ya#12jmhd#;Max Pool Size=10000;MultipleActiveResultSets=True;Connect Timeout=5;Application Name=BuildingLink.Maintenance.Api;ApplicationIntent=ReadWrite;MultiSubnetFailover=True;ConnectRetryCount=20;ConnectRetryInterval=1;Encrypt=True;TrustServerCertificate=True;";
-
-                string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(appSettingsPath, output);
-
-                MessageBox.Show("Connection string updated successfully to staging.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                UpdateDatabaseLabel();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while updating the connection string: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            maintenanceApiService.UpdateConnectionStringToStaging();
+            UpdateDatabaseLabel();
         }
 
         private void ConnectToLocalDatabase_Click(object sender, EventArgs e)
         {
-            var cleanedMaintenanceRootPath = MaintenanceRootPath.Replace("`", "");
-
-            var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
-
-            try
-            {
-                var json = File.ReadAllText(appSettingsPath);
-                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-
-                jsonObj["ConnectionStrings"]["Maintenance"] = "Data Source=localhost;Initial Catalog=Maintenance;User ID=sa;Password=Password1!;Encrypt=True;TrustServerCertificate=True;";
-
-                string output = Newtonsoft.Json.JsonConvert.SerializeObject(jsonObj, Newtonsoft.Json.Formatting.Indented);
-                File.WriteAllText(appSettingsPath, output);
-
-                MessageBox.Show("Connection string updated successfully to local.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                UpdateDatabaseLabel();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while updating the connection string: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            maintenanceApiService.UpdateConnectionStringToLocal();
+            UpdateDatabaseLabel();
         }
 
         private void UpdateDatabaseLabel()
         {
-            var cleanedMaintenanceRootPath = MaintenanceRootPath.Replace("`", "");
+            string dbConnectionStatus = maintenanceApiService.GetDatabaseConnectionStatus();
 
-            var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
-
-            if (!File.Exists(appSettingsPath))
-            {
-                MessageBox.Show($"The path to the app settings file does not exist: {appSettingsPath}", "Path Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
-
-            try
-            {
-                var json = File.ReadAllText(appSettingsPath);
-                dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-                var connectionString = jsonObj["ConnectionStrings"]["Maintenance"].ToString();
-
-                if (connectionString.Contains("localhost"))
-                {
-                    maintDbConnectionStatusLable.Text = "Currently using Local DB";
-                }
-                else
-                {
-                    maintDbConnectionStatusLable.Text = "Currently using Staging DB";
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while reading the app settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            maintDbConnectionStatusLable.Text = string.IsNullOrEmpty(dbConnectionStatus) ? "Connection status unknown" : dbConnectionStatus;
         }
 
         private void UpdateVueConnectionLabel()
         {
-            var vueConnectionConfigPath = $"{VueCoreMicroRootPath}\\config\\env-settings-local.yaml";
+            string statusText = vueWebsiteCoreService.GetVueConnectionStatus();
 
-            if (!File.Exists(vueConnectionConfigPath))
-            {
-                MessageBox.Show($"The path to the Vue connection config file does not exist: {vueConnectionConfigPath}", "Path Not Found", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return;
-            }
+            maintApiConnectionStatusLablel.Text = statusText;
 
-            try
-            {
-                var configContent = File.ReadAllText(vueConnectionConfigPath);
-                string localHostNotCommentedPattern = @"^[^#]*localhost";
-
-                bool isConnectedToLocal = Regex.IsMatch(configContent, localHostNotCommentedPattern, RegexOptions.Multiline);
-
-                if (isConnectedToLocal)
-                {
-                    maintApiConnectionStatusLablel.Text = "Connected to Local API";
-                    maintApiConnectionStatusLablel.ForeColor = Color.Green;
-                }
-                else
-                {
-                    maintApiConnectionStatusLablel.Text = "Connected to Staging API";
-                    maintApiConnectionStatusLablel.ForeColor = Color.Blue;
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"An error occurred while reading the Vue connection settings: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            maintApiConnectionStatusLablel.ForeColor = Color.Green;
         }
 
         private void SelectOrchistratorPath_Click(object sender, EventArgs e)
