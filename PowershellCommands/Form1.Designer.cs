@@ -51,12 +51,21 @@
             this.vueOrchestratorPathTextBox = new System.Windows.Forms.TextBox();
             this.button12 = new System.Windows.Forms.Button();
             this.maintApiConnectionStatusLablel = new System.Windows.Forms.Label();
+            this.vueWebsiteCorePanel = new System.Windows.Forms.Panel();
+            this.orchistratorPanel = new System.Windows.Forms.Panel();
+            this.maintenanceApiPanel = new System.Windows.Forms.Panel();
+            this.vueWebsiteCoreLabel = new System.Windows.Forms.Label();
+            this.OrchistratorLabel = new System.Windows.Forms.Label();
+            this.MaintenanceApiLabel = new System.Windows.Forms.Label();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            this.vueWebsiteCorePanel.SuspendLayout();
+            this.orchistratorPanel.SuspendLayout();
+            this.maintenanceApiPanel.SuspendLayout();
             this.SuspendLayout();
             // 
-            // button1
+            // startVueWebsiteButton
             // 
-            this.startVueWebsiteButton.Location = new System.Drawing.Point(30, 143);
+            this.startVueWebsiteButton.Location = new System.Drawing.Point(26, 143);
             this.startVueWebsiteButton.Name = "startVueWebsiteButton";
             this.startVueWebsiteButton.Size = new System.Drawing.Size(200, 35);
             this.startVueWebsiteButton.TabIndex = 0;
@@ -66,7 +75,7 @@
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(30, 418);
+            this.button2.Location = new System.Drawing.Point(26, 78);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(217, 39);
             this.button2.TabIndex = 1;
@@ -76,7 +85,7 @@
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(30, 468);
+            this.button3.Location = new System.Drawing.Point(26, 128);
             this.button3.Name = "button3";
             this.button3.Size = new System.Drawing.Size(200, 39);
             this.button3.TabIndex = 2;
@@ -86,7 +95,7 @@
             // 
             // button4
             // 
-            this.button4.Location = new System.Drawing.Point(30, 524);
+            this.button4.Location = new System.Drawing.Point(26, 184);
             this.button4.Name = "button4";
             this.button4.Size = new System.Drawing.Size(200, 33);
             this.button4.TabIndex = 3;
@@ -96,7 +105,7 @@
             // 
             // textBox1
             // 
-            this.textBox1.Location = new System.Drawing.Point(236, 526);
+            this.textBox1.Location = new System.Drawing.Point(232, 186);
             this.textBox1.Name = "textBox1";
             this.textBox1.PlaceholderText = "Migration name";
             this.textBox1.Size = new System.Drawing.Size(200, 27);
@@ -104,7 +113,7 @@
             // 
             // button5
             // 
-            this.button5.Location = new System.Drawing.Point(30, 366);
+            this.button5.Location = new System.Drawing.Point(26, 26);
             this.button5.Name = "button5";
             this.button5.Size = new System.Drawing.Size(273, 35);
             this.button5.TabIndex = 4;
@@ -114,7 +123,7 @@
             // 
             // maintenanceRootPathTextBox
             // 
-            this.maintenanceRootPathTextBox.Location = new System.Drawing.Point(309, 369);
+            this.maintenanceRootPathTextBox.Location = new System.Drawing.Point(305, 29);
             this.maintenanceRootPathTextBox.Name = "maintenanceRootPathTextBox";
             this.maintenanceRootPathTextBox.PlaceholderText = "Root path is empty";
             this.maintenanceRootPathTextBox.ReadOnly = true;
@@ -123,7 +132,7 @@
             // 
             // pictureBox1
             // 
-            this.pictureBox1.Location = new System.Drawing.Point(553, 337);
+            this.pictureBox1.Location = new System.Drawing.Point(549, -3);
             this.pictureBox1.Name = "pictureBox1";
             this.pictureBox1.Size = new System.Drawing.Size(125, 64);
             this.pictureBox1.TabIndex = 6;
@@ -131,7 +140,7 @@
             // 
             // button6
             // 
-            this.button6.Location = new System.Drawing.Point(30, 33);
+            this.button6.Location = new System.Drawing.Point(26, 33);
             this.button6.Name = "button6";
             this.button6.Size = new System.Drawing.Size(200, 34);
             this.button6.TabIndex = 7;
@@ -141,7 +150,7 @@
             // 
             // vueCoreRootPathTextBox
             // 
-            this.vueCoreRootPathTextBox.Location = new System.Drawing.Point(245, 37);
+            this.vueCoreRootPathTextBox.Location = new System.Drawing.Point(241, 37);
             this.vueCoreRootPathTextBox.Name = "vueCoreRootPathTextBox";
             this.vueCoreRootPathTextBox.PlaceholderText = "Root path is empty";
             this.vueCoreRootPathTextBox.ReadOnly = true;
@@ -150,7 +159,7 @@
             // 
             // button7
             // 
-            this.button7.Location = new System.Drawing.Point(30, 92);
+            this.button7.Location = new System.Drawing.Point(26, 92);
             this.button7.Name = "button7";
             this.button7.Size = new System.Drawing.Size(291, 29);
             this.button7.TabIndex = 9;
@@ -160,7 +169,7 @@
             // 
             // button8
             // 
-            this.button8.Location = new System.Drawing.Point(342, 92);
+            this.button8.Location = new System.Drawing.Point(338, 92);
             this.button8.Name = "button8";
             this.button8.Size = new System.Drawing.Size(265, 29);
             this.button8.TabIndex = 10;
@@ -171,7 +180,7 @@
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(236, 503);
+            this.label1.Location = new System.Drawing.Point(232, 163);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(115, 20);
             this.label1.TabIndex = 11;
@@ -179,7 +188,7 @@
             // 
             // button9
             // 
-            this.button9.Location = new System.Drawing.Point(30, 588);
+            this.button9.Location = new System.Drawing.Point(26, 248);
             this.button9.Name = "button9";
             this.button9.Size = new System.Drawing.Size(291, 29);
             this.button9.TabIndex = 12;
@@ -187,20 +196,20 @@
             this.button9.UseVisualStyleBackColor = true;
             this.button9.Click += new System.EventHandler(this.ConnectToStagingDb_Click);
             // 
-            // label2
+            // maintDbConnectionStatusLable
             // 
             this.maintDbConnectionStatusLable.AutoSize = true;
             this.maintDbConnectionStatusLable.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.maintDbConnectionStatusLable.ForeColor = System.Drawing.Color.Red;
-            this.maintDbConnectionStatusLable.Location = new System.Drawing.Point(30, 652);
-            this.maintDbConnectionStatusLable.Name = "label2";
+            this.maintDbConnectionStatusLable.Location = new System.Drawing.Point(26, 312);
+            this.maintDbConnectionStatusLable.Name = "maintDbConnectionStatusLable";
             this.maintDbConnectionStatusLable.Size = new System.Drawing.Size(114, 20);
             this.maintDbConnectionStatusLable.TabIndex = 13;
             this.maintDbConnectionStatusLable.Text = "Connected to...";
             // 
             // button10
             // 
-            this.button10.Location = new System.Drawing.Point(374, 588);
+            this.button10.Location = new System.Drawing.Point(328, 248);
             this.button10.Name = "button10";
             this.button10.Size = new System.Drawing.Size(320, 29);
             this.button10.TabIndex = 14;
@@ -210,7 +219,7 @@
             // 
             // button11
             // 
-            this.button11.Location = new System.Drawing.Point(30, 212);
+            this.button11.Location = new System.Drawing.Point(26, 30);
             this.button11.Name = "button11";
             this.button11.Size = new System.Drawing.Size(291, 29);
             this.button11.TabIndex = 15;
@@ -220,7 +229,7 @@
             // 
             // vueOrchestratorPathTextBox
             // 
-            this.vueOrchestratorPathTextBox.Location = new System.Drawing.Point(342, 212);
+            this.vueOrchestratorPathTextBox.Location = new System.Drawing.Point(338, 30);
             this.vueOrchestratorPathTextBox.Name = "vueOrchestratorPathTextBox";
             this.vueOrchestratorPathTextBox.ReadOnly = true;
             this.vueOrchestratorPathTextBox.Size = new System.Drawing.Size(249, 27);
@@ -228,7 +237,7 @@
             // 
             // button12
             // 
-            this.button12.Location = new System.Drawing.Point(30, 260);
+            this.button12.Location = new System.Drawing.Point(26, 78);
             this.button12.Name = "button12";
             this.button12.Size = new System.Drawing.Size(217, 29);
             this.button12.TabIndex = 17;
@@ -236,49 +245,114 @@
             this.button12.UseVisualStyleBackColor = true;
             this.button12.Click += new System.EventHandler(this.StartOrchestrator_Click);
             // 
-            // label3
+            // maintApiConnectionStatusLablel
             // 
             this.maintApiConnectionStatusLablel.AutoSize = true;
-            this.maintApiConnectionStatusLablel.Location = new System.Drawing.Point(291, 150);
-            this.maintApiConnectionStatusLablel.Name = "label3";
-            this.maintApiConnectionStatusLablel.Size = new System.Drawing.Size(50, 20);
+            this.maintApiConnectionStatusLablel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            this.maintApiConnectionStatusLablel.ForeColor = System.Drawing.Color.Red;
+            this.maintApiConnectionStatusLablel.Location = new System.Drawing.Point(287, 150);
+            this.maintApiConnectionStatusLablel.Name = "maintApiConnectionStatusLablel";
+            this.maintApiConnectionStatusLablel.Size = new System.Drawing.Size(102, 20);
             this.maintApiConnectionStatusLablel.TabIndex = 18;
             this.maintApiConnectionStatusLablel.Text = "Connected to";
-            this.maintApiConnectionStatusLablel.ForeColor = System.Drawing.Color.Red;
-            this.maintApiConnectionStatusLablel.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+            // 
+            // vueWebsiteCorePanel
+            // 
+            this.vueWebsiteCorePanel.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.vueWebsiteCorePanel.Controls.Add(this.startVueWebsiteButton);
+            this.vueWebsiteCorePanel.Controls.Add(this.maintApiConnectionStatusLablel);
+            this.vueWebsiteCorePanel.Controls.Add(this.button6);
+            this.vueWebsiteCorePanel.Controls.Add(this.vueCoreRootPathTextBox);
+            this.vueWebsiteCorePanel.Controls.Add(this.button7);
+            this.vueWebsiteCorePanel.Controls.Add(this.button8);
+            this.vueWebsiteCorePanel.Location = new System.Drawing.Point(30, 83);
+            this.vueWebsiteCorePanel.Name = "vueWebsiteCorePanel";
+            this.vueWebsiteCorePanel.Size = new System.Drawing.Size(703, 212);
+            this.vueWebsiteCorePanel.TabIndex = 19;
+            // 
+            // orchistratorPanel
+            // 
+            this.orchistratorPanel.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.orchistratorPanel.Controls.Add(this.button12);
+            this.orchistratorPanel.Controls.Add(this.button11);
+            this.orchistratorPanel.Controls.Add(this.vueOrchestratorPathTextBox);
+            this.orchistratorPanel.Location = new System.Drawing.Point(30, 375);
+            this.orchistratorPanel.Name = "orchistratorPanel";
+            this.orchistratorPanel.Size = new System.Drawing.Size(703, 141);
+            this.orchistratorPanel.TabIndex = 20;
+            // 
+            // maintenanceApiPanel
+            // 
+            this.maintenanceApiPanel.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.maintenanceApiPanel.Controls.Add(this.button5);
+            this.maintenanceApiPanel.Controls.Add(this.button2);
+            this.maintenanceApiPanel.Controls.Add(this.button3);
+            this.maintenanceApiPanel.Controls.Add(this.label1);
+            this.maintenanceApiPanel.Controls.Add(this.button10);
+            this.maintenanceApiPanel.Controls.Add(this.button4);
+            this.maintenanceApiPanel.Controls.Add(this.maintDbConnectionStatusLable);
+            this.maintenanceApiPanel.Controls.Add(this.textBox1);
+            this.maintenanceApiPanel.Controls.Add(this.button9);
+            this.maintenanceApiPanel.Controls.Add(this.maintenanceRootPathTextBox);
+            this.maintenanceApiPanel.Controls.Add(this.pictureBox1);
+            this.maintenanceApiPanel.Location = new System.Drawing.Point(30, 597);
+            this.maintenanceApiPanel.Name = "maintenanceApiPanel";
+            this.maintenanceApiPanel.Size = new System.Drawing.Size(703, 358);
+            this.maintenanceApiPanel.TabIndex = 21;
+            // 
+            // vueWebsiteCoreLabel
+            // 
+            this.vueWebsiteCoreLabel.AutoSize = true;
+            this.vueWebsiteCoreLabel.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.vueWebsiteCoreLabel.Location = new System.Drawing.Point(30, 49);
+            this.vueWebsiteCoreLabel.Name = "vueWebsiteCoreLabel";
+            this.vueWebsiteCoreLabel.Size = new System.Drawing.Size(193, 31);
+            this.vueWebsiteCoreLabel.TabIndex = 19;
+            this.vueWebsiteCoreLabel.Text = "Vue Website Core";
+            // 
+            // OrchistratorLabel
+            // 
+            this.OrchistratorLabel.AutoSize = true;
+            this.OrchistratorLabel.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.OrchistratorLabel.Location = new System.Drawing.Point(30, 341);
+            this.OrchistratorLabel.Name = "OrchistratorLabel";
+            this.OrchistratorLabel.Size = new System.Drawing.Size(136, 31);
+            this.OrchistratorLabel.TabIndex = 18;
+            this.OrchistratorLabel.Text = "Orchistrator";
+            // 
+            // MaintenanceApiLabel
+            // 
+            this.MaintenanceApiLabel.AutoSize = true;
+            this.MaintenanceApiLabel.Font = new System.Drawing.Font("Segoe UI", 13.8F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.MaintenanceApiLabel.Location = new System.Drawing.Point(30, 563);
+            this.MaintenanceApiLabel.Name = "MaintenanceApiLabel";
+            this.MaintenanceApiLabel.Size = new System.Drawing.Size(187, 31);
+            this.MaintenanceApiLabel.TabIndex = 15;
+            this.MaintenanceApiLabel.Text = "Maintenance API";
             // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(800, 740);
-            this.Controls.Add(this.maintApiConnectionStatusLablel);
-            this.Controls.Add(this.button12);
-            this.Controls.Add(this.vueOrchestratorPathTextBox);
-            this.Controls.Add(this.button11);
-            this.Controls.Add(this.button10);
-            this.Controls.Add(this.maintDbConnectionStatusLable);
-            this.Controls.Add(this.button9);
-            this.Controls.Add(this.label1);
-            this.Controls.Add(this.button8);
-            this.Controls.Add(this.button7);
-            this.Controls.Add(this.vueCoreRootPathTextBox);
-            this.Controls.Add(this.button6);
-            this.Controls.Add(this.pictureBox1);
-            this.Controls.Add(this.maintenanceRootPathTextBox);
-            this.Controls.Add(this.button5);
-            this.Controls.Add(this.textBox1);
-            this.Controls.Add(this.button4);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.startVueWebsiteButton);
+            this.BackColor = System.Drawing.Color.LightGray;
+            this.ClientSize = new System.Drawing.Size(766, 992);
+            this.Controls.Add(this.MaintenanceApiLabel);
+            this.Controls.Add(this.OrchistratorLabel);
+            this.Controls.Add(this.vueWebsiteCoreLabel);
+            this.Controls.Add(this.maintenanceApiPanel);
+            this.Controls.Add(this.orchistratorPanel);
+            this.Controls.Add(this.vueWebsiteCorePanel);
             this.Name = "Form1";
-            this.Text = "Form1";
+            this.Text = "Blk Helper";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            this.vueWebsiteCorePanel.ResumeLayout(false);
+            this.vueWebsiteCorePanel.PerformLayout();
+            this.orchistratorPanel.ResumeLayout(false);
+            this.orchistratorPanel.PerformLayout();
+            this.maintenanceApiPanel.ResumeLayout(false);
+            this.maintenanceApiPanel.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
-
-            InitializeButtons();
         }
 
         private void InitializeButtons()
@@ -325,5 +399,11 @@
         private TextBox vueOrchestratorPathTextBox;
         private Button button12;
         private Label maintApiConnectionStatusLablel;
+        private Panel vueWebsiteCorePanel;
+        private Panel orchistratorPanel;
+        private Panel maintenanceApiPanel;
+        private Label vueWebsiteCoreLabel;
+        private Label OrchistratorLabel;
+        private Label MaintenanceApiLabel;
     }
 }
