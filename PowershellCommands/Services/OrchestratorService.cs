@@ -17,7 +17,7 @@ namespace PowershellCommands.Services
             _paths = paths;
         }
 
-        public void StartOrchestrator()
+        public async Task StartOrchestrator()
         {
             var cleanedVueOrchestratorPath = _paths.VueOrchestratorPath.Replace("`", "");
             var jsonFilePath = $"{cleanedVueOrchestratorPath}\\src\\import-map.local.json";
@@ -33,7 +33,7 @@ namespace PowershellCommands.Services
                 File.WriteAllText(jsonFilePath, output);
 
                 // Use the PowerShellCommandExecutor utility class
-                PowerShellCommandExecutor.RunCommand("yarn dev", cleanedVueOrchestratorPath);
+                await PowerShellCommandExecutor.RunCommandAsync("yarn dev", cleanedVueOrchestratorPath);
             }
             catch (Exception ex)
             {

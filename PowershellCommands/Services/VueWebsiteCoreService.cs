@@ -40,10 +40,10 @@ namespace PowershellCommands.Services
             File.WriteAllText(pathToFile, newConfiguration);
         }
 
-        public void StartVueApplication()
+        public async Task StartVueApplication()
         {
             var command = "yarn dev";
-            PowerShellCommandExecutor.RunCommand(command, _paths.VueCoreMicroRootPath);
+            await PowerShellCommandExecutor.RunCommandAsync(command, _paths.VueCoreMicroRootPath);
         }
 
         public void ConnectToDevMaintApi()

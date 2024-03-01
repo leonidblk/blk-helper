@@ -45,22 +45,22 @@ namespace PowershellCommands
             UpdateVueConnectionLabel();
         }
 
-        private void ButtonRunCoreMicro_Click(object sender, EventArgs e)
+        private async void ButtonRunCoreMicro_Click(object sender, EventArgs e)
         {
-            vueWebsiteCoreService.StartVueApplication();
+            await vueWebsiteCoreService.StartVueApplication();
         }
 
-        private void ButtonMaintenanceMigration_Click(object sender, EventArgs e)
+        private async void ButtonMaintenanceMigration_Click(object sender, EventArgs e)
         {
-            maintenanceApiService.RunMaintenanceMigration();
+            await maintenanceApiService.RunMaintenanceMigration();
         }
 
-        private void ButtonRunMaintApi_Click(object sender, EventArgs e)
+        private async void ButtonRunMaintApi_Click(object sender, EventArgs e)
         {
-            maintenanceApiService.StartMaintenanceApi();
+            await maintenanceApiService.StartMaintenanceApi();
         }
 
-        private void ButtonAddMigration_Click(object sender, EventArgs e)
+        private async void ButtonAddMigration_Click(object sender, EventArgs e)
         {
             string migrationName = textBox1.Text.Trim();
             if (string.IsNullOrEmpty(migrationName))
@@ -72,7 +72,7 @@ namespace PowershellCommands
             DialogResult result = MessageBox.Show($"Are you sure you want to add the migration '{migrationName}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
             if (result == DialogResult.Yes)
             {
-                maintenanceApiService.AddMigration(migrationName);
+                await maintenanceApiService.AddMigration(migrationName);
 
             }
         }
@@ -194,9 +194,9 @@ namespace PowershellCommands
             }
         }
 
-        private void StartOrchestrator_Click(object sender, EventArgs e)
+        private async void StartOrchestrator_Click(object sender, EventArgs e)
         {
-            orchestratorService.StartOrchestrator();
+            await orchestratorService.StartOrchestrator();
         }
 
         private void LoadPathsIntoUI()

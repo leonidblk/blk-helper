@@ -16,7 +16,7 @@ namespace PowershellCommands.Services
             _paths = paths;
         }
 
-        public void AddMigration(string migrationName)
+        public async Task AddMigration(string migrationName)
         {
             string migrationCommand = $"cd {_paths.MaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api; " +
                                       "$env:ASPNETCORE_ENVIRONMENT = 'Local'; " +
@@ -24,7 +24,7 @@ namespace PowershellCommands.Services
                                       "--project ..\\BuildingLink.Maintenance.Repositories\\" +
                                       " --output-dir Data\\Migrations";
 
-            PowerShellCommandExecutor.RunCommand(migrationCommand);
+            await PowerShellCommandExecutor.RunCommandAsync(migrationCommand);
         }
 
         public void UpdateDatabaseConnectionString(string connectionString)
@@ -42,13 +42,13 @@ namespace PowershellCommands.Services
             }
         }
 
-        public void StartMaintenanceApi()
+        public async Task StartMaintenanceApi()
         {
             var startCommand = $"cd \"{_paths.MaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\"; dotnet run";
-            PowerShellCommandExecutor.RunCommand(startCommand);
+            await PowerShellCommandExecutor.RunCommandAsync(startCommand);
         }
 
-        public void RunMaintenanceMigration()
+        public async Task RunMaintenanceMigration()
         {
             var cleanedMaintenanceRootPath = _paths.MaintenanceRootPath.Replace("`", "");
             var appSettingsPath = $"{cleanedMaintenanceRootPath}\\src\\BuildingLink.Maintenance.Api\\appsettings.Local.json";
@@ -71,7 +71,7 @@ namespace PowershellCommands.Services
 
                 string command = "$env:ASPNETCORE_ENVIRONMENT = 'Local'; dotnet ef database update";
 
-                PowerShellCommandExecutor.RunCommand(command, cleanedMaintenanceRootPath + "\\src\\BuildingLink.Maintenance.Api");
+                await PowerShellCommandExecutor.RunCommandAsync(command, cleanedMaintenanceRootPath + "\\src\\BuildingLink.Maintenance.Api");
             }
             catch (Exception ex)
             {
