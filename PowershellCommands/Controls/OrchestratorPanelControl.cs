@@ -10,9 +10,11 @@ namespace PowershellCommands.Controls
         private readonly Button selectOrchestratorRootButton;
         private readonly TextBox orchestratorPathTextBox;
         private readonly Button startOrchestratorButton;
+        private readonly Button openInVsCodeButton;
 
         public event EventHandler? SelectOrchestratorPathClicked;
         public event EventHandler? StartOrchestratorClicked;
+        public event EventHandler? OpenInVsCodeClicked;
 
         public string OrchestratorPath
         {
@@ -26,6 +28,7 @@ namespace PowershellCommands.Controls
             selectOrchestratorRootButton = new Button();
             orchestratorPathTextBox = new TextBox();
             startOrchestratorButton = new Button();
+            openInVsCodeButton = new Button();
 
             InitializeComponent();
         }
@@ -72,11 +75,22 @@ namespace PowershellCommands.Controls
             startOrchestratorButton.UseVisualStyleBackColor = true;
             startOrchestratorButton.Click += (_, __) => StartOrchestratorClicked?.Invoke(this, EventArgs.Empty);
             // 
+            // openInVsCodeButton
+            // 
+            openInVsCodeButton.Location = new Point(260, 110);
+            openInVsCodeButton.Name = "openInVsCodeButton";
+            openInVsCodeButton.Size = new Size(217, 29);
+            openInVsCodeButton.TabIndex = 4;
+            openInVsCodeButton.Text = "Open in VS Code";
+            openInVsCodeButton.UseVisualStyleBackColor = true;
+            openInVsCodeButton.Click += (_, __) => OpenInVsCodeClicked?.Invoke(this, EventArgs.Empty);
+            // 
             // OrchestratorPanelControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.WhiteSmoke;
+            Controls.Add(openInVsCodeButton);
             Controls.Add(headerLabel);
             Controls.Add(startOrchestratorButton);
             Controls.Add(selectOrchestratorRootButton);

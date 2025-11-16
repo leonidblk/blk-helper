@@ -1,9 +1,8 @@
 ﻿using Newtonsoft.Json;
 using PowershellCommands.Models;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.Diagnostics;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace PowershellCommands.Services
@@ -38,6 +37,45 @@ namespace PowershellCommands.Services
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        public async Task OpenInVisualStudioCode()
+        {
+            var cleanedVueOrchestratorPath = _paths.VueOrchestratorPath.Replace("`", "");
+
+            if (!Directory.Exists(cleanedVueOrchestratorPath))
+            {
+                MessageBox.Show("Orchestrator root folder does not exist.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            try
+            {
+                await Task.Run(() =>
+                {
+                    var importMapPath = Path.Combine(cleanedVueOrchestratorPath, "src", "import-map.local.json");
+                    string command = "/c code .";
+
+                    if (File.Exists(importMapPath))
+                    {
+                        command += $" \"{importMapPath}\"";
+                    }
+
+                    var psi = new ProcessStartInfo("cmd.exe")
+                    {
+                        Arguments = command,
+                        WorkingDirectory = cleanedVueOrchestratorPath,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    Process.Start(psi);
+                });
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to open in VS Code: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
     }

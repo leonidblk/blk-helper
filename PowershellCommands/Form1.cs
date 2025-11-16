@@ -232,6 +232,11 @@ namespace PowershellCommands
             await orchestratorService.StartOrchestrator();
         }
 
+        private async void ButtonOpenOrchestratorInVsCode_Click(object sender, EventArgs e)
+        {
+            await orchestratorService.OpenInVisualStudioCode();
+        }
+
         private async void ButtonRunEventLogApi_Click(object sender, EventArgs e)
         {
             try
@@ -370,6 +375,7 @@ namespace PowershellCommands
 
             orchestratorSection.SelectOrchestratorPathClicked += SelectOrchistratorPath_Click;
             orchestratorSection.StartOrchestratorClicked += StartOrchestrator_Click;
+            orchestratorSection.OpenInVsCodeClicked += ButtonOpenOrchestratorInVsCode_Click;
 
             maintenanceApiSection.SelectMaintenanceRootClicked += ButtonSaveMaintenanceRootPath_Click;
             maintenanceApiSection.RunMaintenanceMigrationClicked += ButtonMaintenanceMigration_Click;
