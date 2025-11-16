@@ -1,6 +1,8 @@
+using PowershellCommands.Controls;
 using PowershellCommands.Models;
 using PowershellCommands.Services;
 using System.Diagnostics;
+using System.Drawing;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -20,6 +22,7 @@ namespace PowershellCommands
         public Form1()
         {
             InitializeComponent();
+            WireUpSectionEvents();
 
             // NEW
             applicationPaths = new ApplicationPaths
@@ -62,7 +65,7 @@ namespace PowershellCommands
 
         private async void ButtonAddMigration_Click(object sender, EventArgs e)
         {
-            string migrationName = textBox1.Text.Trim();
+            string migrationName = maintenanceApiSection.MigrationName.Trim();
             if (string.IsNullOrEmpty(migrationName))
             {
                 MessageBox.Show("Please enter a migration name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -116,7 +119,7 @@ namespace PowershellCommands
                 {
                     folderBrowserDialog1.SelectedPath = folderBrowserDialog.SelectedPath;
 
-                    maintenanceRootPathTextBox.Text = folderBrowserDialog.SelectedPath;
+                    maintenanceApiSection.MaintenanceRootPath = folderBrowserDialog.SelectedPath;
 
                     Properties.Settings.Default["MaintenanceRootFolder"] = folderBrowserDialog.SelectedPath;
                     Properties.Settings.Default.Save();
@@ -136,7 +139,7 @@ namespace PowershellCommands
                 {
                     folderBrowserDialog3.SelectedPath = folderBrowserDialog.SelectedPath;
 
-                    vueCoreRootPathTextBox.Text = folderBrowserDialog.SelectedPath;
+                    vueWebsiteCoreSection.VueCoreRootPath = folderBrowserDialog.SelectedPath;
 
                     Properties.Settings.Default["VueCoreMicroRootFolder"] = folderBrowserDialog.SelectedPath;
                     Properties.Settings.Default.Save();
@@ -162,16 +165,17 @@ namespace PowershellCommands
         {
             string dbConnectionStatus = maintenanceApiService.GetDatabaseConnectionStatus();
 
-            maintDbConnectionStatusLable.Text = string.IsNullOrEmpty(dbConnectionStatus) ? "Connection status unknown" : dbConnectionStatus;
+            maintenanceApiSection.DatabaseConnectionStatusText = string.IsNullOrEmpty(dbConnectionStatus)
+                ? "Connection status unknown"
+                : dbConnectionStatus;
         }
 
         private void UpdateVueConnectionLabel()
         {
             string statusText = vueWebsiteCoreService.GetVueConnectionStatus();
 
-            maintApiConnectionStatusLablel.Text = statusText;
-
-            maintApiConnectionStatusLablel.ForeColor = Color.Green;
+            vueWebsiteCoreSection.ConnectionStatusText = statusText;
+            vueWebsiteCoreSection.ConnectionStatusColor = Color.Green;
         }
 
         private void SelectOrchistratorPath_Click(object sender, EventArgs e)
@@ -184,7 +188,7 @@ namespace PowershellCommands
                 {
                     vueOrchestratorFolderBrowserDialog.SelectedPath = folderBrowserDialog.SelectedPath;
 
-                    vueOrchestratorPathTextBox.Text = folderBrowserDialog.SelectedPath;
+                    orchestratorSection.OrchestratorPath = folderBrowserDialog.SelectedPath;
 
                     Properties.Settings.Default["VueOrchestratorPath"] = folderBrowserDialog.SelectedPath;
                     Properties.Settings.Default.Save();
@@ -199,11 +203,29 @@ namespace PowershellCommands
             await orchestratorService.StartOrchestrator();
         }
 
+        private void WireUpSectionEvents()
+        {
+            vueWebsiteCoreSection.SelectCoreRootFolderClicked += ButtonSaveVueCoreMicroRootPath_Click;
+            vueWebsiteCoreSection.ConnectToStagingClicked += ButtonConnectStagingMaintApi_Click;
+            vueWebsiteCoreSection.ConnectToLocalClicked += ButtonConnectLocalMaintApi_Click;
+            vueWebsiteCoreSection.StartVueWebsiteClicked += ButtonRunCoreMicro_Click;
+
+            orchestratorSection.SelectOrchestratorPathClicked += SelectOrchistratorPath_Click;
+            orchestratorSection.StartOrchestratorClicked += StartOrchestrator_Click;
+
+            maintenanceApiSection.SelectMaintenanceRootClicked += ButtonSaveMaintenanceRootPath_Click;
+            maintenanceApiSection.RunMaintenanceMigrationClicked += ButtonMaintenanceMigration_Click;
+            maintenanceApiSection.RunMaintenanceApiClicked += ButtonRunMaintApi_Click;
+            maintenanceApiSection.AddMigrationClicked += ButtonAddMigration_Click;
+            maintenanceApiSection.ConnectToStagingDatabaseClicked += ConnectToStagingDb_Click;
+            maintenanceApiSection.ConnectToLocalDatabaseClicked += ConnectToLocalDatabase_Click;
+        }
+
         private void LoadPathsIntoUI()
         {
-            maintenanceRootPathTextBox.Text = applicationPaths.MaintenanceRootPath;
-            vueCoreRootPathTextBox.Text = applicationPaths.VueCoreMicroRootPath;
-            vueOrchestratorPathTextBox.Text = applicationPaths.VueOrchestratorPath;
+            maintenanceApiSection.MaintenanceRootPath = applicationPaths.MaintenanceRootPath;
+            vueWebsiteCoreSection.VueCoreRootPath = applicationPaths.VueCoreMicroRootPath;
+            orchestratorSection.OrchestratorPath = applicationPaths.VueOrchestratorPath;
         }
     }
 }
