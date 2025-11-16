@@ -70,5 +70,17 @@ namespace PowershellCommands.Properties {
                 this["VueCoreMicroRootFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EventLogRootFolder {
+            get {
+                return ((string)(this["EventLogRootFolder"]));
+            }
+            set {
+                this["EventLogRootFolder"] = value;
+            }
+        }
     }
 }

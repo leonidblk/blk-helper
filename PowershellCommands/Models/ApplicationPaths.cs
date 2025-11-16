@@ -11,5 +11,6 @@ namespace PowershellCommands.Models
         public string? MaintenanceRootPath { get; set; }
         public string? VueCoreMicroRootPath { get; set; }
         public string? VueOrchestratorPath { get; set; }
+        public string? EventLogRootPath { get; set; }
     }
 }

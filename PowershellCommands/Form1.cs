@@ -13,11 +13,13 @@ namespace PowershellCommands
         public string MaintenanceRootPath { get; set; }
         public string VueCoreMicroRootPath { get; set; }
         public string VueOrchestratorPath { get; set; }
+        public string EventLogRootPath { get; set; }
 
         private readonly ApplicationPaths applicationPaths;
         private OrchestratorService orchestratorService;
         private MaintenanceApiService maintenanceApiService;
         private VueWebsiteCoreService vueWebsiteCoreService;
+        private EventLogApiService eventLogApiService;
 
         public Form1()
         {
@@ -29,13 +31,15 @@ namespace PowershellCommands
             {
                 MaintenanceRootPath = Properties.Settings.Default["MaintenanceRootFolder"]?.ToString().Replace(" ", "` ") ?? "",
                 VueCoreMicroRootPath = Properties.Settings.Default["VueCoreMicroRootFolder"]?.ToString().Replace("` ", " ") ?? "",
-                VueOrchestratorPath = Properties.Settings.Default["VueOrchestratorPath"]?.ToString() ?? ""
+                VueOrchestratorPath = Properties.Settings.Default["VueOrchestratorPath"]?.ToString() ?? "",
+                EventLogRootPath = Properties.Settings.Default["EventLogRootFolder"]?.ToString().Replace(" ", "` ") ?? ""
             };
 
             // Old to be deleted
             MaintenanceRootPath = Properties.Settings.Default["MaintenanceRootFolder"]?.ToString() ?? "";
             VueCoreMicroRootPath = Properties.Settings.Default["VueCoreMicroRootFolder"]?.ToString() ?? "";
             VueOrchestratorPath = Properties.Settings.Default["VueOrchestratorPath"]?.ToString() ?? "";
+            EventLogRootPath = Properties.Settings.Default["EventLogRootFolder"]?.ToString() ?? "";
 
             LoadPathsIntoUI();
 
@@ -43,9 +47,11 @@ namespace PowershellCommands
             orchestratorService = new OrchestratorService(applicationPaths);
             maintenanceApiService = new MaintenanceApiService(applicationPaths);
             vueWebsiteCoreService = new (applicationPaths);
+            eventLogApiService = new EventLogApiService(applicationPaths);
 
             UpdateDatabaseLabel();
             UpdateVueConnectionLabel();
+            UpdateEventLogDatabaseLabel();
         }
 
         private async void ButtonRunCoreMicro_Click(object sender, EventArgs e)
@@ -178,6 +184,24 @@ namespace PowershellCommands
             vueWebsiteCoreSection.ConnectionStatusColor = Color.Green;
         }
 
+        private void UpdateEventLogDatabaseLabel()
+        {
+            string status = string.Empty;
+
+            try
+            {
+                status = eventLogApiService.GetDatabaseConnectionStatus();
+            }
+            catch (Exception ex)
+            {
+                status = $"Unable to determine status: {ex.Message}";
+            }
+
+            eventLogSection.DatabaseConnectionStatusText = string.IsNullOrEmpty(status)
+                ? "Connection status unknown"
+                : status;
+        }
+
         private void SelectOrchistratorPath_Click(object sender, EventArgs e)
         {
             using (var folderBrowserDialog = new FolderBrowserDialog())
@@ -203,6 +227,103 @@ namespace PowershellCommands
             await orchestratorService.StartOrchestrator();
         }
 
+        private async void ButtonRunEventLogApi_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                await eventLogApiService.StartEventLogApi();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to start EventLog API: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void ButtonRunEventLogMigration_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                await eventLogApiService.RunEventLogMigration();
+                MessageBox.Show("EventLog migration completed successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to run EventLog migration: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private async void ButtonAddEventLogMigration_Click(object sender, EventArgs e)
+        {
+            string migrationName = eventLogSection.MigrationName.Trim();
+            if (string.IsNullOrEmpty(migrationName))
+            {
+                MessageBox.Show("Please enter a migration name.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            DialogResult result = MessageBox.Show($"Are you sure you want to add the EventLog migration '{migrationName}'?", "Confirmation", MessageBoxButtons.YesNo, MessageBoxIcon.Question);
+            if (result == DialogResult.Yes)
+            {
+                try
+                {
+                    await eventLogApiService.AddMigration(migrationName);
+                    MessageBox.Show("Migration added successfully.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Failed to add EventLog migration: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
+        }
+
+        private void ButtonSaveEventLogRootPath_Click(object sender, EventArgs e)
+        {
+            using (var folderBrowserDialog = new FolderBrowserDialog())
+            {
+                DialogResult result = folderBrowserDialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                {
+                    eventLogFolderBrowserDialog.SelectedPath = folderBrowserDialog.SelectedPath;
+                    eventLogSection.EventLogRootPath = folderBrowserDialog.SelectedPath;
+
+                    Properties.Settings.Default["EventLogRootFolder"] = folderBrowserDialog.SelectedPath;
+                    Properties.Settings.Default.Save();
+
+                    EventLogRootPath = folderBrowserDialog.SelectedPath;
+                    applicationPaths.EventLogRootPath = folderBrowserDialog.SelectedPath.Replace(" ", "` ");
+                }
+            }
+        }
+
+        private void ConnectEventLogToDevDatabase_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                eventLogApiService.UpdateConnectionStringToDev();
+                UpdateEventLogDatabaseLabel();
+                MessageBox.Show("EventLog API configured to use Dev database.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to update EventLog database connection: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void ConnectEventLogToLocalDatabase_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                eventLogApiService.UpdateConnectionStringToLocal();
+                UpdateEventLogDatabaseLabel();
+                MessageBox.Show("EventLog API configured to use Local database.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to update EventLog database connection: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private void WireUpSectionEvents()
         {
             vueWebsiteCoreSection.SelectCoreRootFolderClicked += ButtonSaveVueCoreMicroRootPath_Click;
@@ -219,6 +340,13 @@ namespace PowershellCommands
             maintenanceApiSection.AddMigrationClicked += ButtonAddMigration_Click;
             maintenanceApiSection.ConnectToStagingDatabaseClicked += ConnectToStagingDb_Click;
             maintenanceApiSection.ConnectToLocalDatabaseClicked += ConnectToLocalDatabase_Click;
+
+            eventLogSection.SelectRootClicked += ButtonSaveEventLogRootPath_Click;
+            eventLogSection.RunMigrationClicked += ButtonRunEventLogMigration_Click;
+            eventLogSection.RunApiClicked += ButtonRunEventLogApi_Click;
+            eventLogSection.AddMigrationClicked += ButtonAddEventLogMigration_Click;
+            eventLogSection.ConnectDevDatabaseClicked += ConnectEventLogToDevDatabase_Click;
+            eventLogSection.ConnectLocalDatabaseClicked += ConnectEventLogToLocalDatabase_Click;
         }
 
         private void LoadPathsIntoUI()
@@ -226,6 +354,7 @@ namespace PowershellCommands
             maintenanceApiSection.MaintenanceRootPath = applicationPaths.MaintenanceRootPath;
             vueWebsiteCoreSection.VueCoreRootPath = applicationPaths.VueCoreMicroRootPath;
             orchestratorSection.OrchestratorPath = applicationPaths.VueOrchestratorPath;
+            eventLogSection.EventLogRootPath = applicationPaths.EventLogRootPath;
         }
     }
 }
