@@ -82,5 +82,17 @@ namespace PowershellCommands.Properties {
                 this["EventLogRootFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string EventLogVueRootFolder {
+            get {
+                return ((string)(this["EventLogVueRootFolder"]));
+            }
+            set {
+                this["EventLogVueRootFolder"] = value;
+            }
+        }
     }
 }

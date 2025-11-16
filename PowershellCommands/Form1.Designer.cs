@@ -28,10 +28,12 @@ namespace PowershellCommands
             this.folderBrowserDialog3 = new System.Windows.Forms.FolderBrowserDialog();
             this.vueOrchestratorFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.eventLogFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
+            this.eventLogVueFolderBrowserDialog = new System.Windows.Forms.FolderBrowserDialog();
             this.vueWebsiteCoreSection = new PowershellCommands.Controls.VueWebsiteCoreControl();
             this.orchestratorSection = new PowershellCommands.Controls.OrchestratorPanelControl();
             this.maintenanceApiSection = new PowershellCommands.Controls.MaintenanceApiPanelControl();
             this.eventLogSection = new PowershellCommands.Controls.EventLogApiPanelControl();
+            this.eventLogVueSection = new PowershellCommands.Controls.EventLogVueControl();
             this.SuspendLayout();
             // 
             // vueWebsiteCoreSection
@@ -63,12 +65,20 @@ namespace PowershellCommands
             this.eventLogSection.Size = new System.Drawing.Size(703, 420);
             this.eventLogSection.TabIndex = 3;
             // 
+            // eventLogVueSection
+            // 
+            this.eventLogVueSection.Location = new System.Drawing.Point(30, 930);
+            this.eventLogVueSection.Name = "eventLogVueSection";
+            this.eventLogVueSection.Size = new System.Drawing.Size(703, 180);
+            this.eventLogVueSection.TabIndex = 4;
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 20F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.Color.LightGray;
-            this.ClientSize = new System.Drawing.Size(766, 960);
+            this.ClientSize = new System.Drawing.Size(766, 1140);
+            this.Controls.Add(this.eventLogVueSection);
             this.Controls.Add(this.eventLogSection);
             this.Controls.Add(this.maintenanceApiSection);
             this.Controls.Add(this.orchestratorSection);
@@ -84,9 +94,11 @@ namespace PowershellCommands
         private System.Windows.Forms.FolderBrowserDialog folderBrowserDialog3;
         private System.Windows.Forms.FolderBrowserDialog vueOrchestratorFolderBrowserDialog;
         private System.Windows.Forms.FolderBrowserDialog eventLogFolderBrowserDialog;
+        private System.Windows.Forms.FolderBrowserDialog eventLogVueFolderBrowserDialog;
         private Controls.VueWebsiteCoreControl vueWebsiteCoreSection;
         private Controls.OrchestratorPanelControl orchestratorSection;
         private Controls.MaintenanceApiPanelControl maintenanceApiSection;
         private Controls.EventLogApiPanelControl eventLogSection;
+        private Controls.EventLogVueControl eventLogVueSection;
     }
 }
