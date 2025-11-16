@@ -100,9 +100,13 @@ namespace PowershellCommands.Services
             {
                 var json = File.ReadAllText(appSettingsPath);
                 dynamic jsonObj = Newtonsoft.Json.JsonConvert.DeserializeObject(json);
-                var connectionString = jsonObj["ConnectionStrings"]["Maintenance"].ToString();
 
-                return connectionString.Contains("localhost") ? "Currently using Local DB" : "Currently using Staging DB";
+                if (jsonObj["ConnectionStrings"]?["Maintenance"] != null)
+                {
+                    var connectionString = jsonObj["ConnectionStrings"]["Maintenance"].ToString();
+                    return connectionString.Contains("localhost") ? "Currently using Local DB" : "Currently using Staging DB";
+                }
+                return "Maintenance connection string not found.";
             }
 
             return "";
