@@ -9,12 +9,12 @@ namespace PowershellCommands.Services
     public class EventLogApiService
     {
         private readonly ApplicationPaths _paths;
-        private const string LocalConnectionString = "host=localhost;Port=5432;Database=EventLog;Username=postgres;Password=Password1!;";
-        private const string DevConnectionString = "host=development1-20230809184014540300000002.cqsye0eggz8b.us-east-1.rds.amazonaws.com;Port=5432;Database=EventLog;Username=eventlog;Password=%ePyqdPx6y+Z0qjj;Maximum Pool Size=500;";
+        private readonly ConfigurationService _configurationService;
 
-        public EventLogApiService(ApplicationPaths paths)
+        public EventLogApiService(ApplicationPaths paths, ConfigurationService configurationService)
         {
             _paths = paths;
+            _configurationService = configurationService;
         }
 
         public async Task AddMigration(string migrationName)
@@ -56,9 +56,9 @@ namespace PowershellCommands.Services
             await PowerShellCommandExecutor.RunCommandAsync(command, apiPath);
         }
 
-        public void UpdateConnectionStringToLocal() => UpdateConnectionString(LocalConnectionString);
+        public void UpdateConnectionStringToLocal() => UpdateConnectionString(_configurationService.GetConnectionString("EventLog", "Local"));
 
-        public void UpdateConnectionStringToDev() => UpdateConnectionString(DevConnectionString);
+        public void UpdateConnectionStringToDev() => UpdateConnectionString(_configurationService.GetConnectionString("EventLog", "Dev"));
 
         public string GetDatabaseConnectionStatus()
         {

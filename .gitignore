@@ -202,6 +202,10 @@ _pkginfo.txt
 *.msixupload
 *.xap
 
+# Local configuration files with sensitive data
+connectionstrings.local.json
+*.local.json
+
 # Visual Studio cache files
 # files ending in .cache can be ignored
 *.cache

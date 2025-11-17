@@ -18,6 +18,7 @@ namespace PowershellCommands
         public string TsApiClientRootPath { get; set; }
 
         private readonly ApplicationPaths applicationPaths;
+        private readonly ConfigurationService configurationService;
         private OrchestratorService orchestratorService;
         private MaintenanceApiService maintenanceApiService;
         private VueWebsiteCoreService vueWebsiteCoreService;
@@ -50,11 +51,14 @@ namespace PowershellCommands
 
             LoadPathsIntoUI();
 
+            // Initialize configuration service
+            configurationService = new ConfigurationService();
+
             // NEW
             orchestratorService = new OrchestratorService(applicationPaths);
-            maintenanceApiService = new MaintenanceApiService(applicationPaths);
+            maintenanceApiService = new MaintenanceApiService(applicationPaths, configurationService);
             vueWebsiteCoreService = new (applicationPaths);
-            eventLogApiService = new EventLogApiService(applicationPaths);
+            eventLogApiService = new EventLogApiService(applicationPaths, configurationService);
             eventLogVueService = new EventLogVueService(applicationPaths);
 
             UpdateDatabaseLabel();

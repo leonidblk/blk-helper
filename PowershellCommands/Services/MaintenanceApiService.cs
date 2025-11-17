@@ -10,10 +10,12 @@ namespace PowershellCommands.Services
     public class MaintenanceApiService
     {
         private readonly ApplicationPaths _paths;
+        private readonly ConfigurationService _configurationService;
 
-        public MaintenanceApiService(ApplicationPaths paths)
+        public MaintenanceApiService(ApplicationPaths paths, ConfigurationService configurationService)
         {
             _paths = paths;
+            _configurationService = configurationService;
         }
 
         public async Task AddMigration(string migrationName)
@@ -82,13 +84,13 @@ namespace PowershellCommands.Services
 
         public void UpdateConnectionStringToStaging()
         {
-            var connectionString = "Data Source=tcp:SqlCoreDevAGL.buildinglink.local,1433;Initial Catalog=Maintenance;User ID=maintenance;Password=76Ya#12jmhd#;Max Pool Size=10000;MultipleActiveResultSets=True;Connect Timeout=5;Application Name=BuildingLink.Maintenance.Api;ApplicationIntent=ReadWrite;MultiSubnetFailover=True;ConnectRetryCount=20;ConnectRetryInterval=1;Encrypt=True;TrustServerCertificate=True;";
+            var connectionString = _configurationService.GetConnectionString("Maintenance", "Staging");
             UpdateConnectionString(connectionString);
         }
 
         public void UpdateConnectionStringToLocal()
         {
-            var connectionString = "Data Source=localhost;Initial Catalog=Maintenance;User ID=sa;Password=Password1!;Encrypt=True;TrustServerCertificate=True;";
+            var connectionString = _configurationService.GetConnectionString("Maintenance", "Local");
             UpdateConnectionString(connectionString);
         }
 
