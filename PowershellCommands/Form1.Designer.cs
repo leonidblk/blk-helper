@@ -29,11 +29,13 @@ namespace PowershellCommands
             vueOrchestratorFolderBrowserDialog = new FolderBrowserDialog();
             eventLogFolderBrowserDialog = new FolderBrowserDialog();
             eventLogVueFolderBrowserDialog = new FolderBrowserDialog();
+            tsApiClientFolderBrowserDialog = new FolderBrowserDialog();
             vueWebsiteCoreSection = new PowershellCommands.Controls.VueWebsiteCoreControl();
             orchestratorSection = new PowershellCommands.Controls.OrchestratorPanelControl();
             maintenanceApiSection = new PowershellCommands.Controls.MaintenanceApiPanelControl();
             eventLogSection = new PowershellCommands.Controls.EventLogApiPanelControl();
             eventLogVueSection = new PowershellCommands.Controls.EventLogVueControl();
+            tsApiClientSection = new PowershellCommands.Controls.TsApiClientControl();
             SuspendLayout();
             // 
             // vueWebsiteCoreSection
@@ -90,12 +92,22 @@ namespace PowershellCommands
             eventLogVueSection.Size = new Size(703, 180);
             eventLogVueSection.TabIndex = 4;
             // 
+            // tsApiClientSection
+            // 
+            tsApiClientSection.BackColor = Color.WhiteSmoke;
+            tsApiClientSection.Location = new Point(748, 216);
+            tsApiClientSection.Name = "tsApiClientSection";
+            tsApiClientSection.RootPath = "";
+            tsApiClientSection.Size = new Size(703, 140);
+            tsApiClientSection.TabIndex = 5;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
             ClientSize = new Size(1588, 869);
+            Controls.Add(tsApiClientSection);
             Controls.Add(eventLogVueSection);
             Controls.Add(eventLogSection);
             Controls.Add(maintenanceApiSection);
@@ -113,10 +125,12 @@ namespace PowershellCommands
         private System.Windows.Forms.FolderBrowserDialog vueOrchestratorFolderBrowserDialog;
         private System.Windows.Forms.FolderBrowserDialog eventLogFolderBrowserDialog;
         private System.Windows.Forms.FolderBrowserDialog eventLogVueFolderBrowserDialog;
+        private System.Windows.Forms.FolderBrowserDialog tsApiClientFolderBrowserDialog;
         private Controls.VueWebsiteCoreControl vueWebsiteCoreSection;
         private Controls.OrchestratorPanelControl orchestratorSection;
         private Controls.MaintenanceApiPanelControl maintenanceApiSection;
         private Controls.EventLogApiPanelControl eventLogSection;
         private Controls.EventLogVueControl eventLogVueSection;
+        private Controls.TsApiClientControl tsApiClientSection;
     }
 }

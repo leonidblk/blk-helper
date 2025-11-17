@@ -94,5 +94,17 @@ namespace PowershellCommands.Properties {
                 this["EventLogVueRootFolder"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        public string TsApiClientRootFolder {
+            get {
+                return ((string)(this["TsApiClientRootFolder"]));
+            }
+            set {
+                this["TsApiClientRootFolder"] = value;
+            }
+        }
     }
 }

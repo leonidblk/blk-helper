@@ -13,5 +13,6 @@ namespace PowershellCommands.Models
         public string? VueOrchestratorPath { get; set; }
         public string? EventLogRootPath { get; set; }
         public string? EventLogVueRootPath { get; set; }
+        public string? TsApiClientRootPath { get; set; }
     }
 }

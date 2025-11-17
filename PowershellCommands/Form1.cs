@@ -15,6 +15,7 @@ namespace PowershellCommands
         public string VueOrchestratorPath { get; set; }
         public string EventLogRootPath { get; set; }
         public string EventLogVueRootPath { get; set; }
+        public string TsApiClientRootPath { get; set; }
 
         private readonly ApplicationPaths applicationPaths;
         private OrchestratorService orchestratorService;
@@ -35,7 +36,8 @@ namespace PowershellCommands
                 VueCoreMicroRootPath = Properties.Settings.Default["VueCoreMicroRootFolder"]?.ToString().Replace("` ", " ") ?? "",
                 VueOrchestratorPath = Properties.Settings.Default["VueOrchestratorPath"]?.ToString() ?? "",
                 EventLogRootPath = Properties.Settings.Default["EventLogRootFolder"]?.ToString().Replace(" ", "` ") ?? "",
-                EventLogVueRootPath = Properties.Settings.Default["EventLogVueRootFolder"]?.ToString().Replace(" ", "` ") ?? ""
+                EventLogVueRootPath = Properties.Settings.Default["EventLogVueRootFolder"]?.ToString().Replace(" ", "` ") ?? "",
+                TsApiClientRootPath = Properties.Settings.Default["TsApiClientRootFolder"]?.ToString().Replace(" ", "` ") ?? ""
             };
 
             // Old to be deleted
@@ -44,6 +46,7 @@ namespace PowershellCommands
             VueOrchestratorPath = Properties.Settings.Default["VueOrchestratorPath"]?.ToString() ?? "";
             EventLogRootPath = Properties.Settings.Default["EventLogRootFolder"]?.ToString() ?? "";
             EventLogVueRootPath = Properties.Settings.Default["EventLogVueRootFolder"]?.ToString() ?? "";
+            TsApiClientRootPath = Properties.Settings.Default["TsApiClientRootFolder"]?.ToString() ?? "";
 
             LoadPathsIntoUI();
 
@@ -366,6 +369,26 @@ namespace PowershellCommands
             }
         }
 
+        private void ButtonSaveTsApiClientRootPath_Click(object sender, EventArgs e)
+        {
+            using (var folderBrowserDialog = new FolderBrowserDialog())
+            {
+                DialogResult result = folderBrowserDialog.ShowDialog();
+
+                if (result == DialogResult.OK && !string.IsNullOrWhiteSpace(folderBrowserDialog.SelectedPath))
+                {
+                    tsApiClientFolderBrowserDialog.SelectedPath = folderBrowserDialog.SelectedPath;
+                    tsApiClientSection.RootPath = folderBrowserDialog.SelectedPath;
+
+                    Properties.Settings.Default["TsApiClientRootFolder"] = folderBrowserDialog.SelectedPath;
+                    Properties.Settings.Default.Save();
+
+                    TsApiClientRootPath = folderBrowserDialog.SelectedPath;
+                    applicationPaths.TsApiClientRootPath = folderBrowserDialog.SelectedPath.Replace(" ", "` ");
+                }
+            }
+        }
+
         private void WireUpSectionEvents()
         {
             vueWebsiteCoreSection.SelectCoreRootFolderClicked += ButtonSaveVueCoreMicroRootPath_Click;
@@ -393,6 +416,7 @@ namespace PowershellCommands
 
             eventLogVueSection.SelectRootClicked += ButtonSaveEventLogVueRootPath_Click;
             eventLogVueSection.StartVueClicked += ButtonRunEventLogVue_Click;
+            tsApiClientSection.SelectRootClicked += ButtonSaveTsApiClientRootPath_Click;
         }
 
         private void LoadPathsIntoUI()
@@ -402,6 +426,7 @@ namespace PowershellCommands
             orchestratorSection.OrchestratorPath = applicationPaths.VueOrchestratorPath;
             eventLogSection.EventLogRootPath = applicationPaths.EventLogRootPath;
             eventLogVueSection.RootPath = applicationPaths.EventLogVueRootPath;
+            tsApiClientSection.RootPath = applicationPaths.TsApiClientRootPath;
         }
     }
 }
