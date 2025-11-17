@@ -98,7 +98,7 @@ namespace PowershellCommands
             tsApiClientSection.Location = new Point(748, 216);
             tsApiClientSection.Name = "tsApiClientSection";
             tsApiClientSection.RootPath = "";
-            tsApiClientSection.Size = new Size(703, 140);
+            tsApiClientSection.Size = new Size(703, 210);
             tsApiClientSection.TabIndex = 5;
             // 
             // Form1

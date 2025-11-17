@@ -24,6 +24,7 @@ namespace PowershellCommands
         private VueWebsiteCoreService vueWebsiteCoreService;
         private EventLogApiService eventLogApiService;
         private EventLogVueService eventLogVueService;
+        private TsApiClientService tsApiClientService;
 
         public Form1()
         {
@@ -60,6 +61,7 @@ namespace PowershellCommands
             vueWebsiteCoreService = new (applicationPaths);
             eventLogApiService = new EventLogApiService(applicationPaths, configurationService);
             eventLogVueService = new EventLogVueService(applicationPaths);
+            tsApiClientService = new TsApiClientService(applicationPaths);
 
             UpdateDatabaseLabel();
             UpdateVueConnectionLabel();
@@ -421,6 +423,7 @@ namespace PowershellCommands
             eventLogVueSection.SelectRootClicked += ButtonSaveEventLogVueRootPath_Click;
             eventLogVueSection.StartVueClicked += ButtonRunEventLogVue_Click;
             tsApiClientSection.SelectRootClicked += ButtonSaveTsApiClientRootPath_Click;
+            tsApiClientSection.DownloadApiClicked += ButtonDownloadApiDefinition_Click;
         }
 
         private void LoadPathsIntoUI()
@@ -431,6 +434,19 @@ namespace PowershellCommands
             eventLogSection.EventLogRootPath = applicationPaths.EventLogRootPath;
             eventLogVueSection.RootPath = applicationPaths.EventLogVueRootPath;
             tsApiClientSection.RootPath = applicationPaths.TsApiClientRootPath;
+        }
+
+        private async void ButtonDownloadApiDefinition_Click(object? sender, EventArgs e)
+        {
+            try
+            {
+                await tsApiClientService.DownloadEventLogApiDefinitionAsync();
+                MessageBox.Show("API definition downloaded successfully! Check console output.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Failed to download API definition: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
         }
     }
 }

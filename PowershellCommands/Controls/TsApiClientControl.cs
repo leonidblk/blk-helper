@@ -9,8 +9,11 @@ namespace PowershellCommands.Controls
         private readonly Label headerLabel;
         private readonly Button selectRootButton;
         private readonly TextBox rootPathTextBox;
+        private readonly Button downloadApiButton;
+        private readonly Label apiDefinitionLabel; // Label for API definition text
 
         public event EventHandler? SelectRootClicked;
+        public event EventHandler? DownloadApiClicked;
 
         public string RootPath
         {
@@ -23,6 +26,8 @@ namespace PowershellCommands.Controls
             headerLabel = new Label();
             selectRootButton = new Button();
             rootPathTextBox = new TextBox();
+            downloadApiButton = new Button();
+            apiDefinitionLabel = new Label(); // Initialize the API definition label
 
             InitializeComponent();
         }
@@ -60,6 +65,26 @@ namespace PowershellCommands.Controls
             rootPathTextBox.Size = new Size(238, 27);
             rootPathTextBox.TabIndex = 2;
             // 
+            // downloadApiButton
+            // 
+            downloadApiButton.Location = new Point(26, 120);
+            downloadApiButton.Name = "downloadApiButton";
+            downloadApiButton.Size = new Size(273, 35);
+            downloadApiButton.TabIndex = 3;
+            downloadApiButton.Text = "Download API Definition";
+            downloadApiButton.UseVisualStyleBackColor = true;
+            downloadApiButton.Click += (_, __) => DownloadApiClicked?.Invoke(this, EventArgs.Empty);
+            // 
+            // apiDefinitionLabel
+            // 
+            apiDefinitionLabel.AutoSize = true;
+            apiDefinitionLabel.Font = new Font("Segoe UI", 10F, FontStyle.Regular, GraphicsUnit.Point);
+            apiDefinitionLabel.Location = new Point(26, 95);
+            apiDefinitionLabel.Name = "apiDefinitionLabel";
+            apiDefinitionLabel.Size = new Size(200, 23);
+            apiDefinitionLabel.TabIndex = 4;
+            apiDefinitionLabel.Text = "This is the API definition https://eventlog-lborigin.development.buildinglink.com/swagger/PropertyEmployee-v3/swagger.json";
+            // 
             // TsApiClientControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -68,8 +93,10 @@ namespace PowershellCommands.Controls
             Controls.Add(headerLabel);
             Controls.Add(selectRootButton);
             Controls.Add(rootPathTextBox);
+            Controls.Add(downloadApiButton);
+            Controls.Add(apiDefinitionLabel); // Add the API definition label to the control
             Name = "TsApiClientControl";
-            Size = new Size(703, 140);
+            Size = new Size(703, 200);
             ResumeLayout(false);
             PerformLayout();
         }
