@@ -1,10 +1,13 @@
+using Microsoft.OpenApi.Extensions;
+using Microsoft.OpenApi.Models;
+using Microsoft.OpenApi.Readers;
+using Microsoft.OpenApi.Writers;
 using PowershellCommands.Models;
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
-using YamlDotNet.Serialization;
-using YamlDotNet.Serialization.NamingConventions;
 
 namespace PowershellCommands.Services
 {
@@ -22,18 +25,22 @@ namespace PowershellCommands.Services
         {
             try
             {
-                var response = await httpClient.GetStringAsync(apiUrl);
+                await using var responseStream = await httpClient.GetStreamAsync(apiUrl);
+                var reader = new OpenApiStreamReader();
+                var document = reader.Read(responseStream, out var diagnostic);
 
-                // Convert JSON to YAML
-                var deserializer = new DeserializerBuilder()
-                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                    .Build();
-                var serializer = new SerializerBuilder()
-                    .WithNamingConvention(CamelCaseNamingConvention.Instance)
-                    .Build();
+                if (diagnostic.Errors.Any())
+                {
+                    var errorMessages = string.Join(Environment.NewLine, diagnostic.Errors.Select(e => e.Message));
+                    throw new InvalidOperationException($"Failed to parse API definition:{Environment.NewLine}{errorMessages}");
+                }
 
-                var jsonObject = deserializer.Deserialize<object>(response);
-                var yaml = serializer.Serialize(jsonObject);
+                ApplyDocumentOverrides(document, apiUrl);
+
+                using var textWriter = new StringWriter();
+                var yamlWriter = new OpenApiYamlWriter(textWriter);
+                document.SerializeAsV3(yamlWriter);
+                var yaml = textWriter.ToString();
 
                 // Log YAML to console
                 Console.WriteLine("API Definition downloaded successfully (YAML):");
@@ -51,7 +58,16 @@ namespace PowershellCommands.Services
         public async Task<string> DownloadEventLogApiDefinitionAsync()
         {
             const string apiUrl = "https://eventlog-lborigin.development.buildinglink.com/swagger/PropertyEmployee-v3/swagger.json";
-            return await DownloadApiDefinitionAsync(apiUrl);
+            var yaml = await DownloadApiDefinitionAsync(apiUrl);
+
+            // Save the YAML to the appropriate file
+            string rootPath = GetRootPath();
+            string filePath = Path.Combine(rootPath, "defs", "api-buildinglink-com", "EventLog-PropertyEmployee-v3.yaml");
+
+            await File.WriteAllTextAsync(filePath, yaml);
+            Console.WriteLine($"YAML definition saved to: {filePath}");
+
+            return yaml;
         }
 
         public async Task SaveApiDefinitionToFileAsync(string apiDefinition, string? fileName = null)
@@ -85,6 +101,37 @@ namespace PowershellCommands.Services
             }
 
             return cleanedPath;
+        }
+
+        private static void ApplyDocumentOverrides(OpenApiDocument document, string apiUrl)
+        {
+            if (!apiUrl.Contains("PropertyEmployee-v3", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            document.Info.Version = "EventLog/PropertyEmployee/v3";
+
+            var gatewayServer = document.Servers.FirstOrDefault(s =>
+                string.Equals(s.Description, "API Gateway", StringComparison.OrdinalIgnoreCase))
+                ?? document.Servers.FirstOrDefault(s => s.Url?.Contains("localhost:44382", StringComparison.OrdinalIgnoreCase) == true);
+
+            if (gatewayServer != null)
+            {
+                gatewayServer.Url = "/EventLog/PropertyEmployee/v3";
+                if (string.IsNullOrWhiteSpace(gatewayServer.Description))
+                {
+                    gatewayServer.Description = "API Gateway";
+                }
+            }
+            else
+            {
+                document.Servers.Add(new OpenApiServer
+                {
+                    Url = "/EventLog/PropertyEmployee/v3",
+                    Description = "API Gateway"
+                });
+            }
         }
     }
 }
