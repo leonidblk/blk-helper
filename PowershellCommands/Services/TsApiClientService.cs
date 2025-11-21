@@ -103,6 +103,14 @@ namespace PowershellCommands.Services
             return cleanedPath;
         }
 
+        public async Task GenerateTypeScriptClientAsync()
+        {
+            string rootPath = GetRootPath();
+
+            Console.WriteLine("Running `yarn` to regenerate the TypeScript client. This may take a while...");
+            await PowerShellCommandExecutor.RunCommandAsync("yarn", rootPath);
+        }
+
         private static void ApplyDocumentOverrides(OpenApiDocument document, string apiUrl)
         {
             if (!apiUrl.Contains("PropertyEmployee-v3", StringComparison.OrdinalIgnoreCase))

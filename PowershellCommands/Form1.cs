@@ -4,6 +4,7 @@ using PowershellCommands.Services;
 using System.Diagnostics;
 using System.Drawing;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace PowershellCommands
@@ -25,6 +26,9 @@ namespace PowershellCommands
         private EventLogApiService eventLogApiService;
         private EventLogVueService eventLogVueService;
         private TsApiClientService tsApiClientService;
+        private TsApiClientController tsApiClientController;
+        private NodeVersionService nodeVersionService;
+        private UtilsController utilsController;
 
         public Form1()
         {
@@ -62,10 +66,14 @@ namespace PowershellCommands
             eventLogApiService = new EventLogApiService(applicationPaths, configurationService);
             eventLogVueService = new EventLogVueService(applicationPaths);
             tsApiClientService = new TsApiClientService(applicationPaths);
+            tsApiClientController = new TsApiClientController(tsApiClientService, tsApiClientSection);
+            nodeVersionService = new NodeVersionService();
+            utilsController = new UtilsController(nodeVersionService, utilsSection);
 
             UpdateDatabaseLabel();
             UpdateVueConnectionLabel();
             UpdateEventLogDatabaseLabel();
+            _ = utilsController.InitializeAsync();
         }
 
         private async void ButtonRunCoreMicro_Click(object sender, EventArgs e)
@@ -423,7 +431,10 @@ namespace PowershellCommands
             eventLogVueSection.SelectRootClicked += ButtonSaveEventLogVueRootPath_Click;
             eventLogVueSection.StartVueClicked += ButtonRunEventLogVue_Click;
             tsApiClientSection.SelectRootClicked += ButtonSaveTsApiClientRootPath_Click;
-            tsApiClientSection.DownloadApiClicked += ButtonDownloadApiDefinition_Click;
+            tsApiClientSection.DownloadApiClicked += async (_, __) => await tsApiClientController.DownloadApiDefinitionAsync();
+            utilsSection.SwitchVersionClicked += ButtonSwitchNodeVersion_Click;
+            utilsSection.RefreshVersionClicked += ButtonRefreshNodeVersion_Click;
+            utilsSection.CopyVersionClicked += ButtonCopyNodeVersion_Click;
         }
 
         private void LoadPathsIntoUI()
@@ -436,17 +447,19 @@ namespace PowershellCommands
             tsApiClientSection.RootPath = applicationPaths.TsApiClientRootPath;
         }
 
-        private async void ButtonDownloadApiDefinition_Click(object? sender, EventArgs e)
+        private async void ButtonSwitchNodeVersion_Click(object? sender, EventArgs e)
         {
-            try
-            {
-                await tsApiClientService.DownloadEventLogApiDefinitionAsync();
-                MessageBox.Show("API definition downloaded successfully! Check console output.", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Failed to download API definition: {ex.Message}", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            }
+            await utilsController.SwitchNodeVersionAsync();
+        }
+
+        private async void ButtonRefreshNodeVersion_Click(object? sender, EventArgs e)
+        {
+            await utilsController.RefreshNodeVersionStatusAsync();
+        }
+
+        private async void ButtonCopyNodeVersion_Click(object? sender, EventArgs e)
+        {
+            await utilsController.CopyNodeVersionAsync();
         }
     }
 }

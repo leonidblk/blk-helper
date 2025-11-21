@@ -36,6 +36,7 @@ namespace PowershellCommands
             eventLogSection = new PowershellCommands.Controls.EventLogApiPanelControl();
             eventLogVueSection = new PowershellCommands.Controls.EventLogVueControl();
             tsApiClientSection = new PowershellCommands.Controls.TsApiClientControl();
+            utilsSection = new PowershellCommands.Controls.UtilsControl();
             SuspendLayout();
             // 
             // vueWebsiteCoreSection
@@ -101,12 +102,22 @@ namespace PowershellCommands
             tsApiClientSection.Size = new Size(703, 301);
             tsApiClientSection.TabIndex = 5;
             // 
+            // utilsSection
+            // 
+            utilsSection.BackColor = Color.WhiteSmoke;
+            utilsSection.Location = new Point(748, 523);
+            utilsSection.Name = "utilsSection";
+            utilsSection.SelectedVersion = "18";
+            utilsSection.Size = new Size(703, 210);
+            utilsSection.TabIndex = 6;
+            // 
             // Form1
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             BackColor = Color.LightGray;
             ClientSize = new Size(1588, 869);
+            Controls.Add(utilsSection);
             Controls.Add(tsApiClientSection);
             Controls.Add(eventLogVueSection);
             Controls.Add(eventLogSection);
@@ -132,5 +143,6 @@ namespace PowershellCommands
         private Controls.EventLogApiPanelControl eventLogSection;
         private Controls.EventLogVueControl eventLogVueSection;
         private Controls.TsApiClientControl tsApiClientSection;
+        private Controls.UtilsControl utilsSection;
     }
 }

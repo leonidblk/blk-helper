@@ -14,6 +14,7 @@ namespace PowershellCommands.Controls
         private readonly Label step1Label; // Step 1 label
         private readonly Label step2Label; // Step 2 label
         private readonly Label step3Label; // Step 3 label
+        private readonly Label step4Label; // Step 4 label
 
         public event EventHandler? SelectRootClicked;
         public event EventHandler? DownloadApiClicked;
@@ -34,6 +35,7 @@ namespace PowershellCommands.Controls
             step1Label = new Label(); // Initialize Step 1 label
             step2Label = new Label(); // Initialize Step 2 label
             step3Label = new Label(); // Initialize Step 3 label
+            step4Label = new Label(); // Initialize Step 4 label
 
             InitializeComponent();
         }
@@ -121,6 +123,16 @@ namespace PowershellCommands.Controls
             step3Label.TabIndex = 7;
             step3Label.Text = "Step 3: Replace existing definition - Pending";
             // 
+            // step4Label
+            // 
+            step4Label.AutoSize = true;
+            step4Label.Font = new Font("Segoe UI", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            step4Label.Location = new Point(26, 260);
+            step4Label.Name = "step4Label";
+            step4Label.Size = new Size(360, 20);
+            step4Label.TabIndex = 8;
+            step4Label.Text = "Step 4: Generate TypeScript via yarn - Pending";
+            // 
             // TsApiClientControl
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
@@ -134,6 +146,7 @@ namespace PowershellCommands.Controls
             Controls.Add(step1Label);
             Controls.Add(step2Label);
             Controls.Add(step3Label);
+            Controls.Add(step4Label);
             Name = "TsApiClientControl";
             Size = new Size(703, 300);
             ResumeLayout(false);
@@ -152,6 +165,9 @@ namespace PowershellCommands.Controls
                     break;
                 case 3:
                     step3Label.Text = $"Step 3: Replace existing definition - {status}";
+                    break;
+                case 4:
+                    step4Label.Text = $"Step 4: Generate TypeScript via yarn - {status}";
                     break;
             }
         }
