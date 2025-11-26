@@ -18,15 +18,47 @@ namespace PowershellCommands.Services
 
             var trimmed = version.Trim();
             var resolvedVersion = await ResolveVersionAsync(trimmed);
+            var normalizedTarget = NormalizeVersion(resolvedVersion);
+
+            await EnsureVersionInstalledAsync(resolvedVersion);
 
             // Switch to the exact resolved version.
-            await RunCommandForOutputAsync($"nvm use {resolvedVersion}");
+            var useResult = await TryRunCommandAsync($"nvm use {resolvedVersion}");
+            if (!useResult.IsSuccess)
+            {
+                throw new InvalidOperationException(useResult.Message);
+            }
 
             // Verify the switch took effect.
-            var current = await RunCommandForOutputAsync("nvm current");
-            if (!current.Contains(resolvedVersion, StringComparison.OrdinalIgnoreCase))
+            var nodeRaw = await TryGetNodeVersionAsync();
+            var nodeVersion = NormalizeVersion(nodeRaw);
+
+            if (string.Equals(nodeVersion, normalizedTarget, StringComparison.OrdinalIgnoreCase))
             {
-                throw new InvalidOperationException($"nvm did not switch to {resolvedVersion}. Check that system Node is not first in PATH and use the exact patch version installed by nvm.");
+                return;
+            }
+
+            // Fallback to nvm current if node -v did not match.
+            var currentRaw = await RunCommandForOutputAsync("nvm current");
+            var current = NormalizeVersion(currentRaw);
+
+            if (!string.Equals(current, normalizedTarget, StringComparison.OrdinalIgnoreCase))
+            {
+                var message = $"nvm did not switch to {resolvedVersion}.";
+
+                if (!string.IsNullOrWhiteSpace(currentRaw))
+                {
+                    message += $" nvm current: '{currentRaw.Trim()}'.";
+                }
+
+                if (!string.IsNullOrWhiteSpace(nodeRaw))
+                {
+                    message += $" node -v: '{nodeRaw.Trim()}'.";
+                }
+
+                message += " Check that system Node is not first in PATH and use the exact patch version installed by nvm.";
+
+                throw new InvalidOperationException(message);
             }
         }
 
@@ -37,15 +69,22 @@ namespace PowershellCommands.Services
                 return NodeVersionResult.Fail("Please select a Node version.");
             }
 
-            if (!version.Contains(".", StringComparison.Ordinal))
+            var normalizedInput = NormalizeVersion(version);
+
+            if (string.IsNullOrWhiteSpace(normalizedInput))
+            {
+                return NodeVersionResult.Fail("Please select a Node version.");
+            }
+
+            if (!normalizedInput.Contains(".", StringComparison.Ordinal))
             {
                 return NodeVersionResult.Fail("Use the full Node version (including patch), e.g. 18.19.1. If it is not installed, run `nvm install 18.19.1` first.");
             }
 
             try
             {
-                await SwitchVersionAsync(version);
-                return NodeVersionResult.CreateSuccess($"Switched to Node {version}.", version.TrimStart('v', 'V'));
+                await SwitchVersionAsync(normalizedInput);
+                return NodeVersionResult.CreateSuccess($"Switched to Node {normalizedInput}.", normalizedInput);
             }
             catch (Exception ex)
             {
@@ -56,13 +95,15 @@ namespace PowershellCommands.Services
         public async Task<string> GetCurrentVersionAsync()
         {
             var output = await RunCommandForOutputAsync("nvm current");
+            var normalized = NormalizeVersion(output);
 
-            if (string.IsNullOrWhiteSpace(output) || output.Contains("none", StringComparison.OrdinalIgnoreCase))
+            if (string.IsNullOrWhiteSpace(normalized) || normalized.Contains("none", StringComparison.OrdinalIgnoreCase))
             {
                 output = await RunCommandForOutputAsync("node -v");
+                normalized = NormalizeVersion(output);
             }
 
-            return string.IsNullOrWhiteSpace(output) ? "Unknown" : output.Trim();
+            return string.IsNullOrWhiteSpace(normalized) ? "Unknown" : normalized;
         }
 
         public async Task<string> CopyCurrentVersionToClipboardAsync()
@@ -123,7 +164,7 @@ namespace PowershellCommands.Services
         private static async Task<string> ResolveVersionAsync(string versionInput)
         {
             var versions = await GetInstalledVersionsAsync();
-            var target = versionInput.TrimStart('v');
+            var target = NormalizeVersion(versionInput);
 
             // If full version supplied, require an exact match from nvm list.
             if (target.Contains(".", StringComparison.Ordinal))
@@ -170,14 +211,91 @@ namespace PowershellCommands.Services
                     continue;
                 }
 
-                var clean = line.TrimStart('v');
+                var clean = NormalizeVersion(line);
                 if (Version.TryParse(clean, out _))
                 {
-                    found.Add(clean);
+                    found.Add(clean.Trim());
                 }
             }
 
             return found;
+        }
+
+        private static string NormalizeVersion(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value))
+            {
+                return string.Empty;
+            }
+
+            var firstLine = value.Split(new[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries).FirstOrDefault()?.Trim() ?? string.Empty;
+            var withoutPrefix = firstLine.TrimStart('v', 'V').Trim();
+            var digitsOnly = new string(withoutPrefix.TakeWhile(c => char.IsDigit(c) || c == '.').ToArray());
+
+            return string.IsNullOrWhiteSpace(digitsOnly) ? withoutPrefix : digitsOnly;
+        }
+
+        private static async Task<string> TryGetNodeVersionAsync()
+        {
+            try
+            {
+                return await RunCommandForOutputAsync("node -v");
+            }
+            catch
+            {
+                return string.Empty;
+            }
+        }
+
+        private static async Task EnsureVersionInstalledAsync(string version)
+        {
+            var versions = await GetInstalledVersionsAsync();
+            if (versions.Any(v => string.Equals(v, NormalizeVersion(version), StringComparison.OrdinalIgnoreCase)))
+            {
+                return;
+            }
+
+            var installResult = await TryRunCommandAsync($"nvm install {version}");
+            if (!installResult.IsSuccess)
+            {
+                throw new InvalidOperationException($"Failed to install Node {version} via nvm: {installResult.Message}");
+            }
+        }
+
+        private static async Task<NodeUseResult> TryRunCommandAsync(string command)
+        {
+            try
+            {
+                var output = (await RunCommandForOutputAsync(command)).Trim();
+                if (IsUseFailure(output))
+                {
+                    return NodeUseResult.FromFailure(output);
+                }
+
+                return NodeUseResult.FromSuccess(string.IsNullOrWhiteSpace(output) ? "(no output)" : output);
+            }
+            catch (Exception ex)
+            {
+                return NodeUseResult.FromFailure(ex.Message);
+            }
+        }
+
+        private static bool IsUseFailure(string output)
+        {
+            if (string.IsNullOrWhiteSpace(output))
+            {
+                return false;
+            }
+
+            return output.IndexOf("not installed", StringComparison.OrdinalIgnoreCase) >= 0
+                || output.IndexOf("could not find", StringComparison.OrdinalIgnoreCase) >= 0
+                || output.IndexOf("is not recognized", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private record NodeUseResult(bool IsSuccess, string Message, string Output)
+        {
+            public static NodeUseResult FromSuccess(string output) => new(true, string.Empty, output);
+            public static NodeUseResult FromFailure(string message) => new(false, message, message);
         }
     }
 
