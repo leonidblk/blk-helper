@@ -435,6 +435,7 @@ namespace PowershellCommands
             utilsSection.SwitchVersionClicked += ButtonSwitchNodeVersion_Click;
             utilsSection.RefreshVersionClicked += ButtonRefreshNodeVersion_Click;
             utilsSection.CopyVersionClicked += ButtonCopyNodeVersion_Click;
+            utilsSection.ClearNodeCacheClicked += ButtonForceSwitchNodeVersion_Click;
         }
 
         private void LoadPathsIntoUI()
@@ -460,6 +461,11 @@ namespace PowershellCommands
         private async void ButtonCopyNodeVersion_Click(object? sender, EventArgs e)
         {
             await utilsController.CopyNodeVersionAsync();
+        }
+
+        private async void ButtonForceSwitchNodeVersion_Click(object? sender, EventArgs e)
+        {
+            await utilsController.ForceSwitchNodeVersionAsync();
         }
     }
 }

@@ -90,6 +90,30 @@ namespace PowershellCommands.Services
             }
         }
 
+        public async Task ForceSwitchNodeVersionAsync()
+        {
+            var selectedVersion = _utilsControl.SelectedVersion;
+
+            _utilsControl.VersionStatusText = $"Clearing cache and switching to Node {selectedVersion}...";
+            _utilsControl.VersionStatusColor = Color.DimGray;
+
+            var result = await _nodeVersionService.ForceSwitchVersionWithCacheClearAsync(selectedVersion);
+
+            if (result.Success)
+            {
+                _currentNodeVersion = result.Version;
+                _utilsControl.VersionStatusText = $"Node: {result.Version}";
+                _utilsControl.VersionStatusColor = Color.Green;
+                MessageBox.Show(result.Message, "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            }
+            else
+            {
+                _utilsControl.VersionStatusText = result.Message;
+                _utilsControl.VersionStatusColor = Color.Red;
+                MessageBox.Show(result.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
         private async Task LoadNodeVersionsAsync()
         {
             try

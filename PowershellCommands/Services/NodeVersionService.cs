@@ -92,6 +92,50 @@ namespace PowershellCommands.Services
             }
         }
 
+        public async Task<NodeVersionResult> ForceSwitchVersionWithCacheClearAsync(string? version)
+        {
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                return NodeVersionResult.Fail("Please select a Node version.");
+            }
+
+            var normalizedInput = NormalizeVersion(version);
+
+            if (!normalizedInput.Contains(".", StringComparison.Ordinal))
+            {
+                return NodeVersionResult.Fail("Use the full Node version (including patch), e.g. 18.19.1. If it is not installed, run `nvm install 18.19.1` first.");
+            }
+
+            try
+            {
+                var resolved = await ResolveVersionAsync(normalizedInput);
+
+                var cleanupCommands = new[]
+                {
+                    "taskkill /F /IM node.exe",
+                    "taskkill /F /IM npm.exe",
+                    "taskkill /F /IM node",
+                    "Remove-Item \"C:\\\\Program Files\\\\nodejs*\" -Recurse -Force -ErrorAction SilentlyContinue"
+                };
+
+                foreach (var command in cleanupCommands)
+                {
+                    await TryRunCommandAllowErrorsAsync(command);
+                }
+
+                await SwitchVersionAsync(resolved);
+
+                var finalVersion = await GetCurrentVersionAsync();
+                var cleanVersion = finalVersion.TrimStart('v', 'V');
+
+                return NodeVersionResult.CreateSuccess($"Force-switched to Node {cleanVersion}.", cleanVersion);
+            }
+            catch (Exception ex)
+            {
+                return NodeVersionResult.Fail($"Failed to force switch Node version: {ex.Message}");
+            }
+        }
+
         public async Task<string> GetCurrentVersionAsync()
         {
             var output = await RunCommandForOutputAsync("nvm current");
@@ -290,6 +334,18 @@ namespace PowershellCommands.Services
             return output.IndexOf("not installed", StringComparison.OrdinalIgnoreCase) >= 0
                 || output.IndexOf("could not find", StringComparison.OrdinalIgnoreCase) >= 0
                 || output.IndexOf("is not recognized", StringComparison.OrdinalIgnoreCase) >= 0;
+        }
+
+        private static async Task TryRunCommandAllowErrorsAsync(string command)
+        {
+            try
+            {
+                await RunCommandForOutputAsync(command);
+            }
+            catch
+            {
+                // Ignore failures for cleanup attempts; they are best-effort.
+            }
         }
 
         private record NodeUseResult(bool IsSuccess, string Message, string Output)

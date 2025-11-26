@@ -13,11 +13,14 @@ namespace PowershellCommands.Controls
         private readonly Button switchVersionButton;
         private readonly Button refreshVersionButton;
         private readonly Button copyVersionButton;
+        private readonly Button clearNodeCacheButton;
+        private readonly Label clearNodeCacheLabel;
         private readonly Label statusLabel;
 
         public event EventHandler? SwitchVersionClicked;
         public event EventHandler? RefreshVersionClicked;
         public event EventHandler? CopyVersionClicked;
+        public event EventHandler? ClearNodeCacheClicked;
 
         public string SelectedVersion
         {
@@ -45,6 +48,8 @@ namespace PowershellCommands.Controls
             switchVersionButton = new Button();
             refreshVersionButton = new Button();
             copyVersionButton = new Button();
+            clearNodeCacheButton = new Button();
+            clearNodeCacheLabel = new Label();
             statusLabel = new Label();
 
             InitializeComponent();
@@ -114,15 +119,35 @@ namespace PowershellCommands.Controls
             copyVersionButton.UseVisualStyleBackColor = true;
             copyVersionButton.Click += (_, __) => CopyVersionClicked?.Invoke(this, EventArgs.Empty);
             // 
+            // clearNodeCacheButton
+            // 
+            clearNodeCacheButton.Location = new Point(26, 166);
+            clearNodeCacheButton.Name = "clearNodeCacheButton";
+            clearNodeCacheButton.Size = new Size(200, 30);
+            clearNodeCacheButton.TabIndex = 6;
+            clearNodeCacheButton.Text = "Force switch / clear cache";
+            clearNodeCacheButton.UseVisualStyleBackColor = true;
+            clearNodeCacheButton.Click += (_, __) => ClearNodeCacheClicked?.Invoke(this, EventArgs.Empty);
+            // 
+            // clearNodeCacheLabel
+            // 
+            clearNodeCacheLabel.AutoSize = true;
+            clearNodeCacheLabel.Location = new Point(245, 171);
+            clearNodeCacheLabel.MaximumSize = new Size(430, 0);
+            clearNodeCacheLabel.Name = "clearNodeCacheLabel";
+            clearNodeCacheLabel.Size = new Size(334, 40);
+            clearNodeCacheLabel.TabIndex = 7;
+            clearNodeCacheLabel.Text = "If switching to another version results in no error but retains the previous version when checking current version, press this button to clear node cache";
+            // 
             // statusLabel
             // 
             statusLabel.AutoSize = true;
             statusLabel.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
             statusLabel.ForeColor = Color.DimGray;
-            statusLabel.Location = new Point(26, 170);
+            statusLabel.Location = new Point(26, 215);
             statusLabel.Name = "statusLabel";
             statusLabel.Size = new Size(128, 20);
-            statusLabel.TabIndex = 6;
+            statusLabel.TabIndex = 8;
             statusLabel.Text = "Node: checking...";
             // 
             // UtilsControl
@@ -136,9 +161,11 @@ namespace PowershellCommands.Controls
             Controls.Add(switchVersionButton);
             Controls.Add(refreshVersionButton);
             Controls.Add(copyVersionButton);
+            Controls.Add(clearNodeCacheButton);
+            Controls.Add(clearNodeCacheLabel);
             Controls.Add(statusLabel);
             Name = "UtilsControl";
-            Size = new Size(703, 210);
+            Size = new Size(703, 260);
             ResumeLayout(false);
             PerformLayout();
         }
